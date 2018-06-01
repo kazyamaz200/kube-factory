@@ -32,7 +32,7 @@ func TestNewController(t *testing.T) {
 	t.Run("The interactor is injectable", func(t *testing.T) {
 		// Arrange
 		i1 := NewInteractor()
-		i2 := NewInteractor()
+		i2 := &InteractorSpy{}
 
 		// Act
 		controller := NewController(WithInteractor(i1))
@@ -65,7 +65,7 @@ func TestNewController(t *testing.T) {
 func TestSomeUsecase(t *testing.T) {
 	t.Run("interactor.DoSomeUsecase should be called", func(t *testing.T) {
 		// Arrange
-		spy := &TestSomeUsecaseSpy{DoSomeUsecaseCalled: false}
+		spy := &InteractorSpy{DoSomeUsecaseCalled: false}
 		controller := NewController(WithInteractor(spy))
 
 		// Act
@@ -81,7 +81,7 @@ func TestSomeUsecase(t *testing.T) {
 	t.Run("it should response SomeUsecaseViewModel", func(t *testing.T) {
 		// Arrange
 		mockVM := &SomeUsecaseViewModel{}
-		spy := &TestSomeUsecaseSpy{MockViewModel: mockVM}
+		spy := &InteractorSpy{MockViewModel: mockVM}
 		controller := NewController(WithInteractor(spy))
 
 		// Act
@@ -97,12 +97,12 @@ func TestSomeUsecase(t *testing.T) {
 	})
 }
 
-type TestSomeUsecaseSpy struct {
+type InteractorSpy struct {
 	DoSomeUsecaseCalled bool
 	MockViewModel       *SomeUsecaseViewModel
 }
 
-func (s *TestSomeUsecaseSpy) DoSomeUsecase(req *SomeUsecaseRequest, callback func(*SomeUsecaseViewModel, error)) {
+func (s *InteractorSpy) DoSomeUsecase(req *SomeUsecaseRequest, callback func(*SomeUsecaseViewModel, error)) {
 	s.DoSomeUsecaseCalled = true
 	callback(s.MockViewModel, nil)
 }

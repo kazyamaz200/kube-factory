@@ -77,13 +77,32 @@ func TestSomeUsecase(t *testing.T) {
 			t.Errorf("got: %v\nwant: %v", actual, "DoSomeUsecase does not called")
 		}
 	})
+
+	t.Run("it should response SomeUsecaseViewModel", func(t *testing.T) {
+		// Arrange
+		mockVM := &SomeUsecaseViewModel{}
+		spy := &TestSomeUsecaseSpy{MockViewModel: mockVM}
+		controller := NewController(WithInteractor(spy))
+
+		// Act
+		actual, err := controller.SomeUsecase()
+
+		// Assert
+		if actual != mockVM {
+			t.Errorf("got: %v\nwant: %v", actual, mockVM)
+		}
+		if err != nil {
+			t.Errorf("got: %v\nwant: %v", err, "Should be nil")
+		}
+	})
 }
 
 type TestSomeUsecaseSpy struct {
 	DoSomeUsecaseCalled bool
+	MockViewModel       *SomeUsecaseViewModel
 }
 
 func (s *TestSomeUsecaseSpy) DoSomeUsecase(req *SomeUsecaseRequest, callback func(*SomeUsecaseViewModel, error)) {
 	s.DoSomeUsecaseCalled = true
-	callback(nil, nil)
+	callback(s.MockViewModel, nil)
 }

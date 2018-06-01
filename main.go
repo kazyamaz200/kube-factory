@@ -11,9 +11,9 @@ func main() {
 	awesomeInteractor := awesome.NewInteractor(awesome.WithPresenter(awesomePresenter))
 	awesomeController := awesome.NewController(awesome.WithInteractor(awesomeInteractor))
 	awesomeProvider1 := provider.NewAwesome(provider.WithAwesomeService(awesomeController))
-	awesomeProvider1.SomeUsecase()
+	awesomeProvider1.SomeHandler()
 
 	// simple
 	awesomeProvider2 := provider.NewAwesome()
-	awesomeProvider2.SomeUsecase()
+	awesomeProvider2.SomeHandler()
 }

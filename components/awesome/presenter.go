@@ -4,14 +4,14 @@ package awesome
 type Presenter struct {
 }
 
-// PresenterOption is ...
-type PresenterOption func(*Presenter)
-
 // NewPresenter is ...
 func NewPresenter() *Presenter {
 	presenter := &Presenter{}
 	return presenter
 }
+
+// PresenterOption is ...
+type PresenterOption func(*Presenter)
 
 // Presentation is ...
 type Presentation interface {

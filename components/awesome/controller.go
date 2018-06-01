@@ -5,18 +5,6 @@ type Controller struct {
 	interactor Interaction
 }
 
-// ControllerOption is ...
-type ControllerOption func(*Controller)
-
-// WithInteractor is ...
-func WithInteractor(i *Interactor) ControllerOption {
-	return func(s *Controller) {
-		if i != nil {
-			s.interactor = i
-		}
-	}
-}
-
 // NewController is ...
 func NewController(opts ...ControllerOption) *Controller {
 	controller := &Controller{}
@@ -31,6 +19,18 @@ func NewController(opts ...ControllerOption) *Controller {
 	}
 
 	return controller
+}
+
+// ControllerOption is ...
+type ControllerOption func(*Controller)
+
+// WithInteractor is ...
+func WithInteractor(i Interaction) ControllerOption {
+	return func(s *Controller) {
+		if i != nil {
+			s.interactor = i
+		}
+	}
 }
 
 // SomeUsecase is ...

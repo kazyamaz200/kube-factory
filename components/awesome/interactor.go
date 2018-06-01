@@ -5,18 +5,6 @@ type Interactor struct {
 	presenter Presentation
 }
 
-// InteractorOption is ...
-type InteractorOption func(*Interactor)
-
-// WithPresenter is ...
-func WithPresenter(p *Presenter) InteractorOption {
-	return func(s *Interactor) {
-		if p != nil {
-			s.presenter = p
-		}
-	}
-}
-
 // NewInteractor is ...
 func NewInteractor(opts ...InteractorOption) *Interactor {
 	interactor := &Interactor{}
@@ -31,6 +19,18 @@ func NewInteractor(opts ...InteractorOption) *Interactor {
 	}
 
 	return interactor
+}
+
+// InteractorOption is ...
+type InteractorOption func(*Interactor)
+
+// WithPresenter is ...
+func WithPresenter(p Presentation) InteractorOption {
+	return func(s *Interactor) {
+		if p != nil {
+			s.presenter = p
+		}
+	}
 }
 
 // Interaction is ...

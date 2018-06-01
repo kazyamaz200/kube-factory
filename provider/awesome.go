@@ -40,8 +40,8 @@ func NewAwesome(opts ...AwesomeOption) *Awesome {
 	return provider
 }
 
-// SomeUsecase is ...
-func (s *Awesome) SomeUsecase() {
+// SomeHandler is ...
+func (s *Awesome) SomeHandler() {
 	ret, err := s.awesome.SomeUsecase()
 	println(ret)
 	println(err)

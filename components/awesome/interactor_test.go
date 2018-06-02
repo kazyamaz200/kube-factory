@@ -62,10 +62,50 @@ func TestNewInteractor(t *testing.T) {
 	})
 }
 
+func TestDoSomeUsecase(t *testing.T) {
+	t.Run("presenter.PresentSomeUsecase should be called", func(t *testing.T) {
+		// Arrange
+		spy := &PresenterSpy{PresentSomeUsecaseCalled: false}
+		interactor := NewInteractor(WithPresenter(spy))
+		req := &SomeUsecaseRequest{}
+		callback := func(*SomeUsecaseViewModel, error) {}
+
+		// Act
+		interactor.DoSomeUsecase(req, callback)
+
+		// Assert
+		actual := spy.PresentSomeUsecaseCalled
+		if actual != true {
+			t.Errorf("got: %v\nwant: %v", actual, "PresentSomeUsecase does not called")
+		}
+	})
+
+	t.Run("presenter.PresentSomeUsecase should be called with valid SomeUsecaseResponse", func(t *testing.T) {
+		// Arrange
+		spy := &PresenterSpy{}
+		interactor := NewInteractor(WithPresenter(spy))
+		req := &SomeUsecaseRequest{}
+		callback := func(*SomeUsecaseViewModel, error) {}
+
+		// Act
+		interactor.DoSomeUsecase(req, callback)
+
+		// Assert
+		actual := spy.ReceivedResponse
+		if actual == nil {
+			t.Errorf("got: %v\nwant: %v", actual, "Should not be nil")
+		}
+	})
+}
+
 type PresenterSpy struct {
+	PresentSomeUsecaseCalled bool
+	MockViewModel            *SomeUsecaseViewModel
+	ReceivedResponse         *SomeUsecaseResponse
 }
 
 func (s *PresenterSpy) PresentSomeUsecase(res *SomeUsecaseResponse, callback func(*SomeUsecaseViewModel, error)) {
-	vm := &SomeUsecaseViewModel{}
-	callback(vm, nil)
+	s.PresentSomeUsecaseCalled = true
+	s.ReceivedResponse = res
+	callback(s.MockViewModel, nil)
 }

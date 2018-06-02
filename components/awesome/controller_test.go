@@ -95,14 +95,32 @@ func TestSomeUsecase(t *testing.T) {
 			t.Errorf("got: %v\nwant: %v", err, "Should be nil")
 		}
 	})
+
+	t.Run("interactor.DoSomeUsecase should be called with valid SomeUsecaseRequest", func(t *testing.T) {
+		// Arrange
+		mockVM := &SomeUsecaseViewModel{}
+		spy := &InteractorSpy{MockViewModel: mockVM}
+		controller := NewController(WithInteractor(spy))
+
+		// Act
+		controller.SomeUsecase()
+
+		// Assert
+		actual := spy.ReceivedRequest
+		if actual == nil {
+			t.Errorf("got: %v\nwant: %v", actual, "Should not be nil")
+		}
+	})
 }
 
 type InteractorSpy struct {
 	DoSomeUsecaseCalled bool
 	MockViewModel       *SomeUsecaseViewModel
+	ReceivedRequest     *SomeUsecaseRequest
 }
 
 func (s *InteractorSpy) DoSomeUsecase(req *SomeUsecaseRequest, callback func(*SomeUsecaseViewModel, error)) {
 	s.DoSomeUsecaseCalled = true
+	s.ReceivedRequest = req
 	callback(s.MockViewModel, nil)
 }

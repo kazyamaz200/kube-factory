@@ -3,19 +3,19 @@ package awesome
 import "testing"
 
 func TestNewController(t *testing.T) {
-	t.Run("Controller has default interactor", func(t *testing.T) {
+	t.Run("create controller and it has interactor", func(t *testing.T) {
 		// Act
 		controller := NewController()
 
 		// Assert
 		actual := controller.interactor
 		if actual == nil {
-			t.Errorf("got: %v\nwant: %v", actual, "NotNil")
+			t.Errorf("got: %v\nwant: %v", actual, "not nil")
 		}
 
 	})
 
-	t.Run("The interactor is Interaction interface compatible", func(t *testing.T) {
+	t.Run("its interactor is compatible with Interaction", func(t *testing.T) {
 		// Arrange
 		expected := true
 
@@ -29,7 +29,7 @@ func TestNewController(t *testing.T) {
 		}
 	})
 
-	t.Run("The interactor is injectable", func(t *testing.T) {
+	t.Run("its interactor is injectable", func(t *testing.T) {
 		// Arrange
 		i1 := NewInteractor()
 		i2 := &InteractorSpy{}
@@ -47,7 +47,7 @@ func TestNewController(t *testing.T) {
 		}
 	})
 
-	t.Run("The interactor should not be nil with wrong usage", func(t *testing.T) {
+	t.Run("its interactor is not be nil", func(t *testing.T) {
 		// Arrange
 		var i1 *Interactor // nil
 
@@ -57,28 +57,13 @@ func TestNewController(t *testing.T) {
 		// Assert
 		actual := controller.interactor
 		if actual == nil {
-			t.Errorf("got: %v\nwant: %v", actual, "NotNil")
+			t.Errorf("got: %v\nwant: %v", actual, "not nil")
 		}
 	})
 }
 
-func TestSomeUsecase(t *testing.T) {
-	t.Run("interactor.DoSomeUsecase should be called", func(t *testing.T) {
-		// Arrange
-		spy := &InteractorSpy{DoSomeUsecaseCalled: false}
-		controller := NewController(WithInteractor(spy))
-
-		// Act
-		controller.SomeUsecase()
-
-		// Assert
-		actual := spy.DoSomeUsecaseCalled
-		if actual != true {
-			t.Errorf("got: %v\nwant: %v", actual, "DoSomeUsecase does not called")
-		}
-	})
-
-	t.Run("it should response SomeUsecaseViewModel", func(t *testing.T) {
+func TestController_SomeUsecase(t *testing.T) {
+	t.Run("return SomeUsecaseViewModel and error", func(t *testing.T) {
 		// Arrange
 		mockVM := &SomeUsecaseViewModel{}
 		spy := &InteractorSpy{SomeUsecaseViewModelBox: mockVM}
@@ -92,23 +77,27 @@ func TestSomeUsecase(t *testing.T) {
 			t.Errorf("got: %v\nwant: %v", actual, mockVM)
 		}
 		if err != nil {
-			t.Errorf("got: %v\nwant: %v", err, "Should be nil")
+			t.Errorf("got: %v\nwant: %v", err, nil)
 		}
 	})
 
-	t.Run("interactor.DoSomeUsecase should be called with valid SomeUsecaseRequest", func(t *testing.T) {
+	t.Run("call DoSomeUsecase with SomeUsecaseRequest", func(t *testing.T) {
 		// Arrange
 		mockVM := &SomeUsecaseViewModel{}
-		spy := &InteractorSpy{SomeUsecaseViewModelBox: mockVM}
+		spy := &InteractorSpy{DoSomeUsecaseCalled: false, SomeUsecaseViewModelBox: mockVM}
 		controller := NewController(WithInteractor(spy))
 
 		// Act
 		controller.SomeUsecase()
 
 		// Assert
-		actual := spy.SomeUsecaseRequestBox
-		if actual == nil {
-			t.Errorf("got: %v\nwant: %v", actual, "Should not be nil")
+		called := spy.DoSomeUsecaseCalled
+		if called != true {
+			t.Errorf("got: %v\nwant: %v", called, true)
+		}
+		send := spy.SomeUsecaseRequestBox
+		if send == nil {
+			t.Errorf("got: %v\nwant: %v", send, "not nil")
 		}
 	})
 }

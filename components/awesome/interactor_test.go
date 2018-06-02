@@ -91,7 +91,7 @@ func TestDoSomeUsecase(t *testing.T) {
 		interactor.DoSomeUsecase(req, callback)
 
 		// Assert
-		actual := spy.ReceivedResponse
+		actual := spy.SomeUsecaseResponseBox
 		if actual == nil {
 			t.Errorf("got: %v\nwant: %v", actual, "Should not be nil")
 		}
@@ -100,12 +100,12 @@ func TestDoSomeUsecase(t *testing.T) {
 
 type PresenterSpy struct {
 	PresentSomeUsecaseCalled bool
-	MockViewModel            *SomeUsecaseViewModel
-	ReceivedResponse         *SomeUsecaseResponse
+	SomeUsecaseViewModelBox  *SomeUsecaseViewModel
+	SomeUsecaseResponseBox   *SomeUsecaseResponse
 }
 
 func (s *PresenterSpy) PresentSomeUsecase(res *SomeUsecaseResponse, callback func(*SomeUsecaseViewModel, error)) {
 	s.PresentSomeUsecaseCalled = true
-	s.ReceivedResponse = res
-	callback(s.MockViewModel, nil)
+	s.SomeUsecaseResponseBox = res
+	callback(s.SomeUsecaseViewModelBox, nil)
 }

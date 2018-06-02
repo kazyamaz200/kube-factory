@@ -81,7 +81,7 @@ func TestSomeUsecase(t *testing.T) {
 	t.Run("it should response SomeUsecaseViewModel", func(t *testing.T) {
 		// Arrange
 		mockVM := &SomeUsecaseViewModel{}
-		spy := &InteractorSpy{MockViewModel: mockVM}
+		spy := &InteractorSpy{SomeUsecaseViewModelBox: mockVM}
 		controller := NewController(WithInteractor(spy))
 
 		// Act
@@ -99,14 +99,14 @@ func TestSomeUsecase(t *testing.T) {
 	t.Run("interactor.DoSomeUsecase should be called with valid SomeUsecaseRequest", func(t *testing.T) {
 		// Arrange
 		mockVM := &SomeUsecaseViewModel{}
-		spy := &InteractorSpy{MockViewModel: mockVM}
+		spy := &InteractorSpy{SomeUsecaseViewModelBox: mockVM}
 		controller := NewController(WithInteractor(spy))
 
 		// Act
 		controller.SomeUsecase()
 
 		// Assert
-		actual := spy.ReceivedRequest
+		actual := spy.SomeUsecaseRequestBox
 		if actual == nil {
 			t.Errorf("got: %v\nwant: %v", actual, "Should not be nil")
 		}
@@ -114,13 +114,13 @@ func TestSomeUsecase(t *testing.T) {
 }
 
 type InteractorSpy struct {
-	DoSomeUsecaseCalled bool
-	MockViewModel       *SomeUsecaseViewModel
-	ReceivedRequest     *SomeUsecaseRequest
+	DoSomeUsecaseCalled     bool
+	SomeUsecaseViewModelBox *SomeUsecaseViewModel
+	SomeUsecaseRequestBox   *SomeUsecaseRequest
 }
 
 func (s *InteractorSpy) DoSomeUsecase(req *SomeUsecaseRequest, callback func(*SomeUsecaseViewModel, error)) {
 	s.DoSomeUsecaseCalled = true
-	s.ReceivedRequest = req
-	callback(s.MockViewModel, nil)
+	s.SomeUsecaseRequestBox = req
+	callback(s.SomeUsecaseViewModelBox, nil)
 }

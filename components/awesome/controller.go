@@ -33,6 +33,11 @@ func WithInteractor(i Interaction) ControllerOption {
 	}
 }
 
+// AwesomeSDK is ...
+type AwesomeSDK interface {
+	SomeUsecase() (*SomeUsecaseViewModel, error)
+}
+
 // SomeUsecase is ...
 func (s *Controller) SomeUsecase() (*SomeUsecaseViewModel, error) {
 	channel := make(chan func() (*SomeUsecaseViewModel, error))

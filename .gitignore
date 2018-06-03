@@ -48,3 +48,5 @@ Temporary Items
 # Unit test / coverage reports
 .coverage
 coverage.html
+
+vendor

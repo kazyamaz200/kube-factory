@@ -62,6 +62,17 @@ func TestNewInteractor(t *testing.T) {
 	})
 }
 
+type PresenterSpy struct {
+	PresentSomeUsecaseCalled bool
+	SomeUsecaseViewModelBox  *SomeUsecaseViewModel
+	SomeUsecaseResponseBox   *SomeUsecaseResponse
+}
+
+func (s *PresenterSpy) PresentSomeUsecase(res *SomeUsecaseResponse, callback func(*SomeUsecaseViewModel, error)) {
+	s.PresentSomeUsecaseCalled = true
+	s.SomeUsecaseResponseBox = res
+	callback(s.SomeUsecaseViewModelBox, nil)
+}
 func TestInteractor_DoSomeUsecase(t *testing.T) {
 	t.Run("call PresentSomeUsecase with SomeUsecaseResponse", func(t *testing.T) {
 		// Arrange
@@ -83,16 +94,4 @@ func TestInteractor_DoSomeUsecase(t *testing.T) {
 			t.Errorf("got: %v\nwant: %v", send, "not nil")
 		}
 	})
-}
-
-type PresenterSpy struct {
-	PresentSomeUsecaseCalled bool
-	SomeUsecaseViewModelBox  *SomeUsecaseViewModel
-	SomeUsecaseResponseBox   *SomeUsecaseResponse
-}
-
-func (s *PresenterSpy) PresentSomeUsecase(res *SomeUsecaseResponse, callback func(*SomeUsecaseViewModel, error)) {
-	s.PresentSomeUsecaseCalled = true
-	s.SomeUsecaseResponseBox = res
-	callback(s.SomeUsecaseViewModelBox, nil)
 }

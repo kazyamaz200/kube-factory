@@ -62,6 +62,18 @@ func TestNewController(t *testing.T) {
 	})
 }
 
+type InteractorSpy struct {
+	DoSomeUsecaseCalled     bool
+	SomeUsecaseViewModelBox *SomeUsecaseViewModel
+	SomeUsecaseRequestBox   *SomeUsecaseRequest
+}
+
+func (s *InteractorSpy) DoSomeUsecase(req *SomeUsecaseRequest, callback func(*SomeUsecaseViewModel, error)) {
+	s.DoSomeUsecaseCalled = true
+	s.SomeUsecaseRequestBox = req
+	callback(s.SomeUsecaseViewModelBox, nil)
+}
+
 func TestController_SomeUsecase(t *testing.T) {
 	t.Run("return SomeUsecaseViewModel and error", func(t *testing.T) {
 		// Arrange
@@ -100,16 +112,4 @@ func TestController_SomeUsecase(t *testing.T) {
 			t.Errorf("got: %v\nwant: %v", send, "not nil")
 		}
 	})
-}
-
-type InteractorSpy struct {
-	DoSomeUsecaseCalled     bool
-	SomeUsecaseViewModelBox *SomeUsecaseViewModel
-	SomeUsecaseRequestBox   *SomeUsecaseRequest
-}
-
-func (s *InteractorSpy) DoSomeUsecase(req *SomeUsecaseRequest, callback func(*SomeUsecaseViewModel, error)) {
-	s.DoSomeUsecaseCalled = true
-	s.SomeUsecaseRequestBox = req
-	callback(s.SomeUsecaseViewModelBox, nil)
 }

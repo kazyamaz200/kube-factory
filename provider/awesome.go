@@ -1,25 +1,20 @@
 package provider
 
-import "github.com/kyamazawa/glue-go/components/awesome"
-
-// AwesomeService is ...
-type AwesomeService interface {
-	SomeUsecase() (*awesome.SomeUsecaseViewModel, error)
-}
+import "github.com/kyamazawa/glue-go/service"
 
 // Awesome is ...
 type Awesome struct {
-	awesome AwesomeService
+	daemon AwesomeDaemon
 }
 
 // AwesomeOption is ...
 type AwesomeOption func(*Awesome)
 
 // WithAwesomeService is ...
-func WithAwesomeService(i AwesomeService) AwesomeOption {
+func WithAwesomeService(i AwesomeDaemon) AwesomeOption {
 	return func(s *Awesome) {
 		if i != nil {
-			s.awesome = i
+			s.daemon = i
 		}
 	}
 }
@@ -32,17 +27,20 @@ func NewAwesome(opts ...AwesomeOption) *Awesome {
 		opt(provider)
 	}
 
-	if provider.awesome == nil {
-		awesomeController := awesome.NewController()
-		provider.awesome = awesomeController
+	if provider.daemon == nil {
+		daemon := service.NewAwesomeServer()
+		provider.daemon = daemon
 	}
 
 	return provider
 }
 
-// SomeHandler is ...
-func (s *Awesome) SomeHandler() {
-	ret, err := s.awesome.SomeUsecase()
-	println(ret)
-	println(err)
+// AwesomeDaemon is ...
+type AwesomeDaemon interface {
+	Start()
+}
+
+// Run is ...
+func (s *Awesome) Run() {
+	s.daemon.Start()
 }

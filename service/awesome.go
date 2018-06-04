@@ -1,7 +1,9 @@
 package service
 
 import (
+	"fmt"
 	"log"
+	"net"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -45,9 +47,17 @@ func NewAwesomeServer(opts ...AwesomeServerOption) *AwesomeServer {
 }
 
 // Start is ...
-func (s *AwesomeServer) Start() {
-	log.Println("Listening on :8080")
-	http.ListenAndServe(":8080", s.router)
+func (s *AwesomeServer) Start() net.Listener {
+	l, err := net.Listen("tcp", fmt.Sprintf(":%d", 8080))
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+	go func() {
+		http.Serve(l, s.router)
+	}()
+	// log.Println("Listening on :8080")
+	return l
 }
 
 func (s *AwesomeServer) config() {

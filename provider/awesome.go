@@ -1,6 +1,10 @@
 package provider
 
-import "github.com/kyamazawa/glue-go/service"
+import (
+	"net"
+
+	"github.com/kyamazawa/glue-go/service"
+)
 
 // Awesome is ...
 type Awesome struct {
@@ -37,7 +41,7 @@ func NewAwesome(opts ...AwesomeOption) *Awesome {
 
 // AwesomeDaemon is ...
 type AwesomeDaemon interface {
-	Start()
+	Start() net.Listener
 }
 
 // Run is ...

@@ -66,6 +66,15 @@ func TestNewAwesome(t *testing.T) {
 	})
 }
 
+type AwesomeDaemonSpy struct {
+	StartCalled bool
+}
+
+func (s *AwesomeDaemonSpy) Start() net.Listener {
+	s.StartCalled = true
+	return nil
+}
+
 func TestAwesome_Run(t *testing.T) {
 	t.Run("call Start", func(t *testing.T) {
 		// Arrange
@@ -81,13 +90,4 @@ func TestAwesome_Run(t *testing.T) {
 			t.Errorf("got: %v\nwant: %v", called, true)
 		}
 	})
-}
-
-type AwesomeDaemonSpy struct {
-	StartCalled bool
-}
-
-func (s *AwesomeDaemonSpy) Start() net.Listener {
-	s.StartCalled = true
-	return nil
 }

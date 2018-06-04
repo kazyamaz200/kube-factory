@@ -103,6 +103,16 @@ func TestAwesomeServer_Start(t *testing.T) {
 	})
 }
 
+type AwesomeSDKSpy struct {
+	SomeUsecaseCalled       bool
+	SomeUsecaseViewModelBox *awesome.SomeUsecaseViewModel
+}
+
+func (s *AwesomeSDKSpy) SomeUsecase() (*awesome.SomeUsecaseViewModel, error) {
+	s.SomeUsecaseCalled = true
+	return s.SomeUsecaseViewModelBox, nil
+}
+
 func TestAwesomeServer_rootHandler(t *testing.T) {
 	t.Run("call SomeUsecase", func(t *testing.T) {
 		// Arrange
@@ -119,14 +129,4 @@ func TestAwesomeServer_rootHandler(t *testing.T) {
 			t.Errorf("got: %v\nwant: %v", called, true)
 		}
 	})
-}
-
-type AwesomeSDKSpy struct {
-	SomeUsecaseCalled       bool
-	SomeUsecaseViewModelBox *awesome.SomeUsecaseViewModel
-}
-
-func (s *AwesomeSDKSpy) SomeUsecase() (*awesome.SomeUsecaseViewModel, error) {
-	s.SomeUsecaseCalled = true
-	return s.SomeUsecaseViewModelBox, nil
 }

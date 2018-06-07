@@ -30,8 +30,8 @@ func NewUserStoreArango(opts ...UserStoreArangoOption) *UserStoreArango {
 // UserStoreArangoOption is ...
 type UserStoreArangoOption func(*UserStoreArango)
 
-// WithConnector is ...
-func WithConnector(i connector.ArangoCollection) UserStoreArangoOption {
+// WithUserCollection is ...
+func WithUserCollection(i connector.ArangoCollection) UserStoreArangoOption {
 	return func(s *UserStoreArango) {
 		if i != nil {
 			s.collection = i

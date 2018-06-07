@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/kyamazawa/glue-go/components/factory"
+	"github.com/kyamazawa/kube-factory/components/factory"
 )
 
 // FactoryServerHTTP is ...

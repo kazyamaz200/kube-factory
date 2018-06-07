@@ -4,7 +4,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/kyamazawa/glue-go/service"
+	"github.com/kyamazawa/kube-factory/service"
 )
 
 func TestNewAPI(t *testing.T) {
@@ -79,7 +79,7 @@ func TestAPI_Run(t *testing.T) {
 		provider := NewAPI(WithFactoryServer(spy))
 
 		// Act
-		provider.Run()
+		provider.Activate()
 
 		// Assert
 		called := spy.StartCalled

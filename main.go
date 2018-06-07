@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/kyamazawa/glue-go/provider"
+	"github.com/kyamazawa/kube-factory/provider"
 )
 
 func main() {

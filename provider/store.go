@@ -1,8 +1,8 @@
 package provider
 
 import (
-	"github.com/kyamazawa/glue-go/model"
-	"github.com/kyamazawa/glue-go/service"
+	"github.com/kyamazawa/kube-factory/model"
+	"github.com/kyamazawa/kube-factory/service"
 )
 
 // Store is ...

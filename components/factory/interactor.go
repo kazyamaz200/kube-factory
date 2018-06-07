@@ -1,6 +1,6 @@
 package factory
 
-import "github.com/kyamazawa/glue-go/model"
+import "github.com/kyamazawa/kube-factory/model"
 
 // Interactor is ...
 type Interactor struct {

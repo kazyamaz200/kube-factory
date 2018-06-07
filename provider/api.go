@@ -3,7 +3,7 @@ package provider
 import (
 	"net"
 
-	"github.com/kyamazawa/glue-go/service"
+	"github.com/kyamazawa/kube-factory/service"
 )
 
 // API is ...

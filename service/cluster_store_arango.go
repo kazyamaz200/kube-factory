@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/kyamazawa/glue-go/connector"
-	"github.com/kyamazawa/glue-go/model"
+	"github.com/kyamazawa/kube-factory/connector"
+	"github.com/kyamazawa/kube-factory/model"
 )
 
 // ClusterStoreArango is ...

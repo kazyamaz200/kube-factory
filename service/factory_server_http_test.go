@@ -4,7 +4,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/kyamazawa/glue-go/components/factory"
+	"github.com/kyamazawa/kube-factory/components/factory"
 )
 
 func TestNewFactoryServerHTTP(t *testing.T) {

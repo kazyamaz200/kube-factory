@@ -1,4 +1,4 @@
-package awesome
+package factory
 
 // Presenter is ...
 type Presenter struct {

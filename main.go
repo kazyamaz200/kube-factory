@@ -8,16 +8,16 @@ import (
 )
 
 func main() {
-	// awesomePresenter := awesome.NewPresenter()
-	// awesomeInteractor := awesome.NewInteractor(awesome.WithPresenter(awesomePresenter))
-	// awesomeController := awesome.NewController(awesome.WithInteractor(awesomeInteractor))
-	// awesomeService := service.NewAwesomeServerHTTP(service.WithAwesomeSDK(awesomeController))
-	// awesomeProvider := provider.NewAPI(provider.WithAwesomeServer(awesomeService))
+	// factoryPresenter := factory.NewPresenter()
+	// factoryInteractor := factory.NewInteractor(factory.WithPresenter(factoryPresenter))
+	// factoryController := factory.NewController(factory.WithInteractor(factoryInteractor))
+	// factoryService := service.NewFactoryServerHTTP(service.WithFactorySDK(factoryController))
+	// factoryProvider := provider.NewAPI(provider.WithFactoryServer(factoryService))
 
-	// awesomeProvider := provider.NewAPI()
+	// factoryProvider := provider.NewAPI()
 
 	// ch := make(chan bool)
-	// go awesomeProvider.Run()
+	// go factoryProvider.Run()
 	// log.Println(<-ch)
 
 	store := provider.NewStore()

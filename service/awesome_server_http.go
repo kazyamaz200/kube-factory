@@ -7,26 +7,26 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/kyamazawa/glue-go/components/awesome"
+	"github.com/kyamazawa/glue-go/components/factory"
 )
 
-// AwesomeServerHTTP is ...
-type AwesomeServerHTTP struct {
+// FactoryServerHTTP is ...
+type FactoryServerHTTP struct {
 	router  *mux.Router
-	awesome awesome.AwesomeSDK
+	factory factory.FactorySDK
 }
 
-// NewAwesomeServerHTTP is ...
-func NewAwesomeServerHTTP(opts ...AwesomeServerHTTPOption) *AwesomeServerHTTP {
-	service := &AwesomeServerHTTP{router: mux.NewRouter()}
+// NewFactoryServerHTTP is ...
+func NewFactoryServerHTTP(opts ...FactoryServerHTTPOption) *FactoryServerHTTP {
+	service := &FactoryServerHTTP{router: mux.NewRouter()}
 
 	for _, opt := range opts {
 		opt(service)
 	}
 
-	if service.awesome == nil {
-		awesomeSDK := awesome.NewController()
-		service.awesome = awesomeSDK
+	if service.factory == nil {
+		factorySDK := factory.NewController()
+		service.factory = factorySDK
 	}
 
 	service.config()
@@ -34,20 +34,20 @@ func NewAwesomeServerHTTP(opts ...AwesomeServerHTTPOption) *AwesomeServerHTTP {
 	return service
 }
 
-// AwesomeServerHTTPOption is ...
-type AwesomeServerHTTPOption func(*AwesomeServerHTTP)
+// FactoryServerHTTPOption is ...
+type FactoryServerHTTPOption func(*FactoryServerHTTP)
 
-// WithAwesomeSDK is ...
-func WithAwesomeSDK(i awesome.AwesomeSDK) AwesomeServerHTTPOption {
-	return func(s *AwesomeServerHTTP) {
+// WithFactorySDK is ...
+func WithFactorySDK(i factory.FactorySDK) FactoryServerHTTPOption {
+	return func(s *FactoryServerHTTP) {
 		if i != nil {
-			s.awesome = i
+			s.factory = i
 		}
 	}
 }
 
 // Start is ...
-func (s *AwesomeServerHTTP) Start() net.Listener {
+func (s *FactoryServerHTTP) Start() net.Listener {
 	l, err := net.Listen("tcp", fmt.Sprintf(":%d", 8080))
 	if err != nil {
 		log.Println(err)
@@ -60,12 +60,12 @@ func (s *AwesomeServerHTTP) Start() net.Listener {
 	return l
 }
 
-func (s *AwesomeServerHTTP) config() {
+func (s *FactoryServerHTTP) config() {
 	s.router.HandleFunc("/", s.rootHandler).Methods("GET")
 }
 
-func (s *AwesomeServerHTTP) rootHandler(w http.ResponseWriter, r *http.Request) {
-	ret, err := s.awesome.SomeUsecase()
+func (s *FactoryServerHTTP) rootHandler(w http.ResponseWriter, r *http.Request) {
+	ret, err := s.factory.SomeUsecase()
 	println(ret)
 	println(err)
 }

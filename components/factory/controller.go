@@ -1,4 +1,4 @@
-package awesome
+package factory
 
 // Controller is ...
 type Controller struct {
@@ -33,8 +33,8 @@ func WithInteractor(i Interaction) ControllerOption {
 	}
 }
 
-// AwesomeSDK is ...
-type AwesomeSDK interface {
+// FactorySDK is ...
+type FactorySDK interface {
 	SomeUsecase() (*SomeUsecaseViewModel, error)
 }
 

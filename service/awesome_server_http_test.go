@@ -4,16 +4,16 @@ import (
 	"net"
 	"testing"
 
-	"github.com/kyamazawa/glue-go/components/awesome"
+	"github.com/kyamazawa/glue-go/components/factory"
 )
 
-func TestNewAwesomeServerHTTP(t *testing.T) {
+func TestNewFactoryServerHTTP(t *testing.T) {
 	t.Run("create service and it has sdk and router", func(t *testing.T) {
 		// Act
-		service := NewAwesomeServerHTTP()
+		service := NewFactoryServerHTTP()
 
 		// Assert
-		sdk := service.awesome
+		sdk := service.factory
 		router := service.router
 		if sdk == nil {
 			t.Errorf("got: %v\nwant: %v", sdk, "not nil")
@@ -23,15 +23,15 @@ func TestNewAwesomeServerHTTP(t *testing.T) {
 		}
 	})
 
-	t.Run("its sdk is compatible with awesome.AwesomeSDK", func(t *testing.T) {
+	t.Run("its sdk is compatible with factory.FactorySDK", func(t *testing.T) {
 		// Arrange
 		expected := true
 
 		// Act
-		service := NewAwesomeServerHTTP()
+		service := NewFactoryServerHTTP()
 
 		// Assert
-		_, actual := service.awesome.(awesome.AwesomeSDK)
+		_, actual := service.factory.(factory.FactorySDK)
 		if actual != expected {
 			t.Errorf("got: %v\nwant: %v", actual, expected)
 		}
@@ -39,14 +39,14 @@ func TestNewAwesomeServerHTTP(t *testing.T) {
 
 	t.Run("its sdk is injectable", func(t *testing.T) {
 		// Arrange
-		i1 := awesome.NewController()
-		i2 := &AwesomeSDKSpy{}
+		i1 := factory.NewController()
+		i2 := &FactorySDKSpy{}
 
 		// Act
-		service := NewAwesomeServerHTTP(WithAwesomeSDK(i1))
+		service := NewFactoryServerHTTP(WithFactorySDK(i1))
 
 		// Assert
-		actual := service.awesome
+		actual := service.factory
 		if actual != i1 {
 			t.Errorf("got: %v\nwant: %v", actual, i1)
 		}
@@ -57,20 +57,20 @@ func TestNewAwesomeServerHTTP(t *testing.T) {
 
 	t.Run("its sdk is not be nil", func(t *testing.T) {
 		// Act
-		service := NewAwesomeServerHTTP(WithAwesomeSDK(nil))
+		service := NewFactoryServerHTTP(WithFactorySDK(nil))
 
 		// Assert
-		actual := service.awesome
+		actual := service.factory
 		if actual == nil {
 			t.Errorf("got: %v\nwant: %v", actual, "not nil")
 		}
 	})
 }
 
-func TestAwesomeServerHTTP_Start(t *testing.T) {
+func TestFactoryServerHTTP_Start(t *testing.T) {
 	t.Run("listen on :8080", func(t *testing.T) {
 		// Arrange
-		service := NewAwesomeServerHTTP()
+		service := NewFactoryServerHTTP()
 
 		// Act
 		l1 := service.Start()
@@ -86,7 +86,7 @@ func TestAwesomeServerHTTP_Start(t *testing.T) {
 
 	t.Run("cannot bind address already in use", func(t *testing.T) {
 		// Arrange
-		service := NewAwesomeServerHTTP()
+		service := NewFactoryServerHTTP()
 
 		// Act
 		l1 := service.Start()
@@ -100,22 +100,22 @@ func TestAwesomeServerHTTP_Start(t *testing.T) {
 	})
 }
 
-type AwesomeSDKSpy struct {
+type FactorySDKSpy struct {
 	SomeUsecaseCalled       bool
-	SomeUsecaseViewModelBox *awesome.SomeUsecaseViewModel
+	SomeUsecaseViewModelBox *factory.SomeUsecaseViewModel
 }
 
-func (s *AwesomeSDKSpy) SomeUsecase() (*awesome.SomeUsecaseViewModel, error) {
+func (s *FactorySDKSpy) SomeUsecase() (*factory.SomeUsecaseViewModel, error) {
 	s.SomeUsecaseCalled = true
 	return s.SomeUsecaseViewModelBox, nil
 }
 
-func TestAwesomeServerHTTP_rootHandler(t *testing.T) {
+func TestFactoryServerHTTP_rootHandler(t *testing.T) {
 	t.Run("call SomeUsecase", func(t *testing.T) {
 		// Arrange
-		mockVM := &awesome.SomeUsecaseViewModel{}
-		spy := &AwesomeSDKSpy{SomeUsecaseCalled: false, SomeUsecaseViewModelBox: mockVM}
-		service := NewAwesomeServerHTTP(WithAwesomeSDK(spy))
+		mockVM := &factory.SomeUsecaseViewModel{}
+		spy := &FactorySDKSpy{SomeUsecaseCalled: false, SomeUsecaseViewModelBox: mockVM}
+		service := NewFactoryServerHTTP(WithFactorySDK(spy))
 
 		// Act
 		service.rootHandler(nil, nil)

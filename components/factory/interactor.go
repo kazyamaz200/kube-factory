@@ -1,4 +1,4 @@
-package awesome
+package factory
 
 // Interactor is ...
 type Interactor struct {

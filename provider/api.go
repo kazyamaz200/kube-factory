@@ -8,7 +8,7 @@ import (
 
 // API is ...
 type API struct {
-	awesomeServer Daemon
+	factoryServer Daemon
 }
 
 // NewAPI is ...
@@ -19,9 +19,9 @@ func NewAPI(opts ...APIOption) *API {
 		opt(provider)
 	}
 
-	if provider.awesomeServer == nil {
-		awesomeServer := service.NewAwesomeServerHTTP()
-		provider.awesomeServer = awesomeServer
+	if provider.factoryServer == nil {
+		factoryServer := service.NewFactoryServerHTTP()
+		provider.factoryServer = factoryServer
 	}
 
 	return provider
@@ -30,11 +30,11 @@ func NewAPI(opts ...APIOption) *API {
 // APIOption is ...
 type APIOption func(*API)
 
-// WithAwesomeServer is ...
-func WithAwesomeServer(i Daemon) APIOption {
+// WithFactoryServer is ...
+func WithFactoryServer(i Daemon) APIOption {
 	return func(s *API) {
 		if i != nil {
-			s.awesomeServer = i
+			s.factoryServer = i
 		}
 	}
 }
@@ -46,5 +46,5 @@ type Daemon interface {
 
 // Run is ...
 func (s *API) Run() {
-	s.awesomeServer.Start()
+	s.factoryServer.Start()
 }

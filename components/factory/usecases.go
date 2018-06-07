@@ -1,4 +1,4 @@
-package awesome
+package factory
 
 // SomeUsecaseRequest is ...
 type SomeUsecaseRequest struct {

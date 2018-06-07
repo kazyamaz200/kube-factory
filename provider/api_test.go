@@ -13,7 +13,7 @@ func TestNewAPI(t *testing.T) {
 		provider := NewAPI()
 
 		// Assert
-		daemon := provider.awesomeServer
+		daemon := provider.factoryServer
 		if daemon == nil {
 			t.Errorf("got: %v\nwant: %v", daemon, "not nil")
 		}
@@ -27,7 +27,7 @@ func TestNewAPI(t *testing.T) {
 		provider := NewAPI()
 
 		// Assert
-		_, actual := provider.awesomeServer.(Daemon)
+		_, actual := provider.factoryServer.(Daemon)
 		if actual != expected {
 			t.Errorf("got: %v\nwant: %v", actual, expected)
 		}
@@ -35,14 +35,14 @@ func TestNewAPI(t *testing.T) {
 
 	t.Run("its daemon is injectable", func(t *testing.T) {
 		// Arrange
-		i1 := service.NewAwesomeServerHTTP()
+		i1 := service.NewFactoryServerHTTP()
 		i2 := &DaemonSpy{}
 
 		// Act
-		provider := NewAPI(WithAwesomeServer(i1))
+		provider := NewAPI(WithFactoryServer(i1))
 
 		// Assert
-		actual := provider.awesomeServer
+		actual := provider.factoryServer
 		if actual != i1 {
 			t.Errorf("got: %v\nwant: %v", actual, i1)
 		}
@@ -53,10 +53,10 @@ func TestNewAPI(t *testing.T) {
 
 	t.Run("its daemon is not be nil", func(t *testing.T) {
 		// Act
-		provider := NewAPI(WithAwesomeServer(nil))
+		provider := NewAPI(WithFactoryServer(nil))
 
 		// Assert
-		actual := provider.awesomeServer
+		actual := provider.factoryServer
 		if actual == nil {
 			t.Errorf("got: %v\nwant: %v", actual, "not nil")
 		}
@@ -76,7 +76,7 @@ func TestAPI_Run(t *testing.T) {
 	t.Run("call Start", func(t *testing.T) {
 		// Arrange
 		spy := &DaemonSpy{StartCalled: false}
-		provider := NewAPI(WithAwesomeServer(spy))
+		provider := NewAPI(WithFactoryServer(spy))
 
 		// Act
 		provider.Run()

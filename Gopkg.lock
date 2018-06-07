@@ -2,6 +2,23 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/arangodb/go-driver"
+  packages = [
+    ".",
+    "cluster",
+    "http",
+    "util"
+  ]
+  revision = "e9be214401cefd40e7d4e1aea6e8dadbb6e7a659"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/arangodb/go-velocypack"
+  packages = ["."]
+  revision = "c899a2a2271f97f297fd70afd031e5ffb9497f83"
+
+[[projects]]
   name = "github.com/gorilla/context"
   packages = ["."]
   revision = "08b5f424b9271eedf6f9f0ce86cb9396ed337a42"
@@ -16,6 +33,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "4212248b7f50201de7dd825b9603236a5a9ea952519be13b46e30544213de809"
+  inputs-digest = "fbb90962b5206862731caa9ea8856bd633d6fdadab29db4c9319953bfac64fae"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -7,10 +7,10 @@ import (
 	"github.com/kyamazawa/glue-go/components/awesome"
 )
 
-func TestNewAwesomeServer(t *testing.T) {
+func TestNewAwesomeServerHTTP(t *testing.T) {
 	t.Run("create service and it has sdk and router", func(t *testing.T) {
 		// Act
-		service := NewAwesomeServer()
+		service := NewAwesomeServerHTTP()
 
 		// Assert
 		sdk := service.awesome
@@ -28,7 +28,7 @@ func TestNewAwesomeServer(t *testing.T) {
 		expected := true
 
 		// Act
-		service := NewAwesomeServer()
+		service := NewAwesomeServerHTTP()
 
 		// Assert
 		_, actual := service.awesome.(awesome.AwesomeSDK)
@@ -43,7 +43,7 @@ func TestNewAwesomeServer(t *testing.T) {
 		i2 := &AwesomeSDKSpy{}
 
 		// Act
-		service := NewAwesomeServer(WithAwesomeSDK(i1))
+		service := NewAwesomeServerHTTP(WithAwesomeSDK(i1))
 
 		// Assert
 		actual := service.awesome
@@ -56,11 +56,8 @@ func TestNewAwesomeServer(t *testing.T) {
 	})
 
 	t.Run("its sdk is not be nil", func(t *testing.T) {
-		// Arrange
-		var i1 *awesome.Controller // nil
-
 		// Act
-		service := NewAwesomeServer(WithAwesomeSDK(i1))
+		service := NewAwesomeServerHTTP(WithAwesomeSDK(nil))
 
 		// Assert
 		actual := service.awesome
@@ -70,10 +67,10 @@ func TestNewAwesomeServer(t *testing.T) {
 	})
 }
 
-func TestAwesomeServer_Start(t *testing.T) {
+func TestAwesomeServerHTTP_Start(t *testing.T) {
 	t.Run("listen on :8080", func(t *testing.T) {
 		// Arrange
-		service := NewAwesomeServer()
+		service := NewAwesomeServerHTTP()
 
 		// Act
 		l1 := service.Start()
@@ -89,7 +86,7 @@ func TestAwesomeServer_Start(t *testing.T) {
 
 	t.Run("cannot bind address already in use", func(t *testing.T) {
 		// Arrange
-		service := NewAwesomeServer()
+		service := NewAwesomeServerHTTP()
 
 		// Act
 		l1 := service.Start()
@@ -113,12 +110,12 @@ func (s *AwesomeSDKSpy) SomeUsecase() (*awesome.SomeUsecaseViewModel, error) {
 	return s.SomeUsecaseViewModelBox, nil
 }
 
-func TestAwesomeServer_rootHandler(t *testing.T) {
+func TestAwesomeServerHTTP_rootHandler(t *testing.T) {
 	t.Run("call SomeUsecase", func(t *testing.T) {
 		// Arrange
 		mockVM := &awesome.SomeUsecaseViewModel{}
 		spy := &AwesomeSDKSpy{SomeUsecaseCalled: false, SomeUsecaseViewModelBox: mockVM}
-		service := NewAwesomeServer(WithAwesomeSDK(spy))
+		service := NewAwesomeServerHTTP(WithAwesomeSDK(spy))
 
 		// Act
 		service.rootHandler(nil, nil)

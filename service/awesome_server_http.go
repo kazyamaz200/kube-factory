@@ -10,27 +10,15 @@ import (
 	"github.com/kyamazawa/glue-go/components/awesome"
 )
 
-// AwesomeServer is ...
-type AwesomeServer struct {
+// AwesomeServerHTTP is ...
+type AwesomeServerHTTP struct {
 	router  *mux.Router
 	awesome awesome.AwesomeSDK
 }
 
-// AwesomeServerOption is ...
-type AwesomeServerOption func(*AwesomeServer)
-
-// WithAwesomeSDK is ...
-func WithAwesomeSDK(i awesome.AwesomeSDK) AwesomeServerOption {
-	return func(s *AwesomeServer) {
-		if i != nil {
-			s.awesome = i
-		}
-	}
-}
-
-// NewAwesomeServer is ...
-func NewAwesomeServer(opts ...AwesomeServerOption) *AwesomeServer {
-	service := &AwesomeServer{router: mux.NewRouter()}
+// NewAwesomeServerHTTP is ...
+func NewAwesomeServerHTTP(opts ...AwesomeServerHTTPOption) *AwesomeServerHTTP {
+	service := &AwesomeServerHTTP{router: mux.NewRouter()}
 
 	for _, opt := range opts {
 		opt(service)
@@ -46,8 +34,20 @@ func NewAwesomeServer(opts ...AwesomeServerOption) *AwesomeServer {
 	return service
 }
 
+// AwesomeServerHTTPOption is ...
+type AwesomeServerHTTPOption func(*AwesomeServerHTTP)
+
+// WithAwesomeSDK is ...
+func WithAwesomeSDK(i awesome.AwesomeSDK) AwesomeServerHTTPOption {
+	return func(s *AwesomeServerHTTP) {
+		if i != nil {
+			s.awesome = i
+		}
+	}
+}
+
 // Start is ...
-func (s *AwesomeServer) Start() net.Listener {
+func (s *AwesomeServerHTTP) Start() net.Listener {
 	l, err := net.Listen("tcp", fmt.Sprintf(":%d", 8080))
 	if err != nil {
 		log.Println(err)
@@ -60,11 +60,11 @@ func (s *AwesomeServer) Start() net.Listener {
 	return l
 }
 
-func (s *AwesomeServer) config() {
+func (s *AwesomeServerHTTP) config() {
 	s.router.HandleFunc("/", s.rootHandler).Methods("GET")
 }
 
-func (s *AwesomeServer) rootHandler(w http.ResponseWriter, r *http.Request) {
+func (s *AwesomeServerHTTP) rootHandler(w http.ResponseWriter, r *http.Request) {
 	ret, err := s.awesome.SomeUsecase()
 	println(ret)
 	println(err)

@@ -1,12 +1,15 @@
-package utils
+package connector
 
 import (
 	driver "github.com/arangodb/go-driver"
 	"github.com/arangodb/go-driver/http"
 )
 
-// NewArangoCollection is ...
-func NewArangoCollection(endpoints []string, dbName string, collectionName string) driver.Collection {
+// ArangoCollection as driver.CollectionDocuments
+type ArangoCollection = driver.CollectionDocuments
+
+// ConnectArangoCollection is ...
+func ConnectArangoCollection(endpoints []string, dbName string, collectionName string) ArangoCollection {
 	conn, err := http.NewConnection(http.ConnectionConfig{
 		Endpoints: endpoints,
 	})
@@ -28,10 +31,10 @@ func NewArangoCollection(endpoints []string, dbName string, collectionName strin
 		panic(err)
 	}
 
-	collection, err := db.Collection(nil, collectionName)
+	connector, err := db.Collection(nil, collectionName)
 	if err != nil {
 		panic(err)
 	}
 
-	return collection
+	return connector
 }

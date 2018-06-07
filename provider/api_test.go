@@ -7,27 +7,27 @@ import (
 	"github.com/kyamazawa/glue-go/service"
 )
 
-func TestNewAwesome(t *testing.T) {
+func TestNewAPI(t *testing.T) {
 	t.Run("create provider and it has daemon", func(t *testing.T) {
 		// Act
-		provider := NewAwesome()
+		provider := NewAPI()
 
 		// Assert
-		daemon := provider.daemon
+		daemon := provider.awesomeServer
 		if daemon == nil {
 			t.Errorf("got: %v\nwant: %v", daemon, "not nil")
 		}
 	})
 
-	t.Run("its daemon is compatible with AwesomeDaemon", func(t *testing.T) {
+	t.Run("its daemon is compatible with Daemon", func(t *testing.T) {
 		// Arrange
 		expected := true
 
 		// Act
-		provider := NewAwesome()
+		provider := NewAPI()
 
 		// Assert
-		_, actual := provider.daemon.(AwesomeDaemon)
+		_, actual := provider.awesomeServer.(Daemon)
 		if actual != expected {
 			t.Errorf("got: %v\nwant: %v", actual, expected)
 		}
@@ -35,14 +35,14 @@ func TestNewAwesome(t *testing.T) {
 
 	t.Run("its daemon is injectable", func(t *testing.T) {
 		// Arrange
-		i1 := service.NewAwesomeServer()
-		i2 := &AwesomeDaemonSpy{}
+		i1 := service.NewAwesomeServerHTTP()
+		i2 := &DaemonSpy{}
 
 		// Act
-		provider := NewAwesome(WithAwesomeService(i1))
+		provider := NewAPI(WithAwesomeServer(i1))
 
 		// Assert
-		actual := provider.daemon
+		actual := provider.awesomeServer
 		if actual != i1 {
 			t.Errorf("got: %v\nwant: %v", actual, i1)
 		}
@@ -52,34 +52,31 @@ func TestNewAwesome(t *testing.T) {
 	})
 
 	t.Run("its daemon is not be nil", func(t *testing.T) {
-		// Arrange
-		var i1 *service.AwesomeServer // nil
-
 		// Act
-		provider := NewAwesome(WithAwesomeService(i1))
+		provider := NewAPI(WithAwesomeServer(nil))
 
 		// Assert
-		actual := provider.daemon
+		actual := provider.awesomeServer
 		if actual == nil {
 			t.Errorf("got: %v\nwant: %v", actual, "not nil")
 		}
 	})
 }
 
-type AwesomeDaemonSpy struct {
+type DaemonSpy struct {
 	StartCalled bool
 }
 
-func (s *AwesomeDaemonSpy) Start() net.Listener {
+func (s *DaemonSpy) Start() net.Listener {
 	s.StartCalled = true
 	return nil
 }
 
-func TestAwesome_Run(t *testing.T) {
+func TestAPI_Run(t *testing.T) {
 	t.Run("call Start", func(t *testing.T) {
 		// Arrange
-		spy := &AwesomeDaemonSpy{StartCalled: false}
-		provider := NewAwesome(WithAwesomeService(spy))
+		spy := &DaemonSpy{StartCalled: false}
+		provider := NewAPI(WithAwesomeServer(spy))
 
 		// Act
 		provider.Run()

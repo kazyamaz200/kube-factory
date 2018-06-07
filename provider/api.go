@@ -44,7 +44,7 @@ type Daemon interface {
 	Start() net.Listener
 }
 
-// Run is ...
-func (s *API) Run() {
+// Activate is ...
+func (s *API) Activate() {
 	s.factoryServer.Start()
 }

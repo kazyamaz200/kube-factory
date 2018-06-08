@@ -1,4 +1,4 @@
-package service
+package server
 
 import (
 	"net"
@@ -7,10 +7,10 @@ import (
 	"github.com/kyamazawa/kube-factory/components/factory"
 )
 
-func TestNewFactoryServerHTTP(t *testing.T) {
+func TestNewFactoryHTTP(t *testing.T) {
 	t.Run("create service and it has sdk and router", func(t *testing.T) {
 		// Act
-		service := NewFactoryServerHTTP()
+		service := NewFactoryHTTP()
 
 		// Assert
 		sdk := service.factory
@@ -28,7 +28,7 @@ func TestNewFactoryServerHTTP(t *testing.T) {
 		expected := true
 
 		// Act
-		service := NewFactoryServerHTTP()
+		service := NewFactoryHTTP()
 
 		// Assert
 		_, actual := service.factory.(factory.FactorySDK)
@@ -43,7 +43,7 @@ func TestNewFactoryServerHTTP(t *testing.T) {
 		i2 := &FactorySDKSpy{}
 
 		// Act
-		service := NewFactoryServerHTTP(WithFactorySDK(i1))
+		service := NewFactoryHTTP(WithFactorySDK(i1))
 
 		// Assert
 		actual := service.factory
@@ -57,7 +57,7 @@ func TestNewFactoryServerHTTP(t *testing.T) {
 
 	t.Run("its sdk is not be nil", func(t *testing.T) {
 		// Act
-		service := NewFactoryServerHTTP(WithFactorySDK(nil))
+		service := NewFactoryHTTP(WithFactorySDK(nil))
 
 		// Assert
 		actual := service.factory
@@ -67,10 +67,10 @@ func TestNewFactoryServerHTTP(t *testing.T) {
 	})
 }
 
-func TestFactoryServerHTTP_Start(t *testing.T) {
+func TestFactoryHTTP_Start(t *testing.T) {
 	t.Run("listen on :8080", func(t *testing.T) {
 		// Arrange
-		service := NewFactoryServerHTTP()
+		service := NewFactoryHTTP()
 
 		// Act
 		l1 := service.Start()
@@ -86,7 +86,7 @@ func TestFactoryServerHTTP_Start(t *testing.T) {
 
 	t.Run("cannot bind address already in use", func(t *testing.T) {
 		// Arrange
-		service := NewFactoryServerHTTP()
+		service := NewFactoryHTTP()
 
 		// Act
 		l1 := service.Start()
@@ -110,12 +110,12 @@ func (s *FactorySDKSpy) SomeUsecase() (*factory.SomeUsecaseViewModel, error) {
 	return s.SomeUsecaseViewModelBox, nil
 }
 
-func TestFactoryServerHTTP_rootHandler(t *testing.T) {
+func TestFactoryHTTP_rootHandler(t *testing.T) {
 	t.Run("call SomeUsecase", func(t *testing.T) {
 		// Arrange
 		mockVM := &factory.SomeUsecaseViewModel{}
 		spy := &FactorySDKSpy{SomeUsecaseCalled: false, SomeUsecaseViewModelBox: mockVM}
-		service := NewFactoryServerHTTP(WithFactorySDK(spy))
+		service := NewFactoryHTTP(WithFactorySDK(spy))
 
 		// Act
 		service.rootHandler(nil, nil)

@@ -3,28 +3,27 @@ package provider
 import (
 	"net"
 	"testing"
-
-	"github.com/kyamazawa/kube-factory/service"
 )
 
 func TestNewAPI(t *testing.T) {
-	t.Run("create provider and it has daemon", func(t *testing.T) {
+	t.Run("create provider and it has nil factoryServer", func(t *testing.T) {
 		// Act
 		provider := NewAPI()
 
 		// Assert
-		daemon := provider.factoryServer
-		if daemon == nil {
-			t.Errorf("got: %v\nwant: %v", daemon, "not nil")
+		factoryServer := provider.factoryServer
+		if factoryServer != nil {
+			t.Errorf("got: %v\nwant: %v", factoryServer, "nil")
 		}
 	})
 
-	t.Run("its daemon is compatible with Daemon", func(t *testing.T) {
+	t.Run("its factoryServer is compatible with Daemon", func(t *testing.T) {
 		// Arrange
+		i1 := &DaemonSpy{}
 		expected := true
 
 		// Act
-		provider := NewAPI()
+		provider := NewAPI(WithFactoryServer(i1))
 
 		// Assert
 		_, actual := provider.factoryServer.(Daemon)
@@ -35,7 +34,7 @@ func TestNewAPI(t *testing.T) {
 
 	t.Run("its daemon is injectable", func(t *testing.T) {
 		// Arrange
-		i1 := service.NewFactoryServerHTTP()
+		i1 := &DaemonSpy{}
 		i2 := &DaemonSpy{}
 
 		// Act
@@ -48,17 +47,6 @@ func TestNewAPI(t *testing.T) {
 		}
 		if actual == i2 {
 			t.Errorf("got: %v\nwant: %v", actual, i2)
-		}
-	})
-
-	t.Run("its daemon is not be nil", func(t *testing.T) {
-		// Act
-		provider := NewAPI(WithFactoryServer(nil))
-
-		// Assert
-		actual := provider.factoryServer
-		if actual == nil {
-			t.Errorf("got: %v\nwant: %v", actual, "not nil")
 		}
 	})
 }

@@ -1,6 +1,9 @@
 package factory
 
-import "github.com/kyamazawa/kube-factory/model"
+import (
+	"github.com/kyamazawa/kube-factory/model"
+	"github.com/kyamazawa/kube-factory/provider"
+)
 
 // Interactor is ...
 type Interactor struct {
@@ -19,6 +22,11 @@ func NewInteractor(opts ...InteractorOption) *Interactor {
 	if interactor.presenter == nil {
 		presenter := NewPresenter()
 		interactor.presenter = presenter
+	}
+
+	if interactor.store == nil {
+		store := provider.NewStore()
+		interactor.store = store
 	}
 
 	return interactor

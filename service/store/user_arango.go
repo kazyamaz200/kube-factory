@@ -1,18 +1,18 @@
-package service
+package store
 
 import (
 	"github.com/kyamazawa/kube-factory/connector"
 	"github.com/kyamazawa/kube-factory/model"
 )
 
-// UserStoreArango is ...
-type UserStoreArango struct {
+// UserArango is ...
+type UserArango struct {
 	collection connector.ArangoCollection
 }
 
-// NewUserStoreArango is ...
-func NewUserStoreArango(opts ...UserStoreArangoOption) *UserStoreArango {
-	service := &UserStoreArango{}
+// NewUserArango is ...
+func NewUserArango(opts ...UserArangoOption) *UserArango {
+	service := &UserArango{}
 	for _, opt := range opts {
 		opt(service)
 	}
@@ -27,12 +27,12 @@ func NewUserStoreArango(opts ...UserStoreArangoOption) *UserStoreArango {
 	return service
 }
 
-// UserStoreArangoOption is ...
-type UserStoreArangoOption func(*UserStoreArango)
+// UserArangoOption is ...
+type UserArangoOption func(*UserArango)
 
 // WithUserCollection is ...
-func WithUserCollection(i connector.ArangoCollection) UserStoreArangoOption {
-	return func(s *UserStoreArango) {
+func WithUserCollection(i connector.ArangoCollection) UserArangoOption {
+	return func(s *UserArango) {
 		if i != nil {
 			s.collection = i
 		}
@@ -40,7 +40,7 @@ func WithUserCollection(i connector.ArangoCollection) UserStoreArangoOption {
 }
 
 // Save is ...
-func (s *UserStoreArango) Save(user *model.User) (*model.User, error) {
+func (s *UserArango) Save(user *model.User) (*model.User, error) {
 	meta, err := s.collection.CreateDocument(nil, user)
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (s *UserStoreArango) Save(user *model.User) (*model.User, error) {
 }
 
 // FetchByID is ...
-func (s *UserStoreArango) FetchByID(userID string) (*model.User, error) {
+func (s *UserArango) FetchByID(userID string) (*model.User, error) {
 	var user model.User
 	s.collection.ReadDocument(nil, userID, &user)
 	user.ID = userID

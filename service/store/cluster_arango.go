@@ -1,18 +1,18 @@
-package service
+package store
 
 import (
 	"github.com/kyamazawa/kube-factory/connector"
 	"github.com/kyamazawa/kube-factory/model"
 )
 
-// ClusterStoreArango is ...
-type ClusterStoreArango struct {
+// ClusterArango is ...
+type ClusterArango struct {
 	collection connector.ArangoCollection
 }
 
-// NewClusterStoreArango is ...
-func NewClusterStoreArango(opts ...ClusterStoreArangoOption) *ClusterStoreArango {
-	service := &ClusterStoreArango{}
+// NewClusterArango is ...
+func NewClusterArango(opts ...ClusterArangoOption) *ClusterArango {
+	service := &ClusterArango{}
 	for _, opt := range opts {
 		opt(service)
 	}
@@ -27,12 +27,12 @@ func NewClusterStoreArango(opts ...ClusterStoreArangoOption) *ClusterStoreArango
 	return service
 }
 
-// ClusterStoreArangoOption is ...
-type ClusterStoreArangoOption func(*ClusterStoreArango)
+// ClusterArangoOption is ...
+type ClusterArangoOption func(*ClusterArango)
 
 // WithClusterCollection is ...
-func WithClusterCollection(i connector.ArangoCollection) ClusterStoreArangoOption {
-	return func(s *ClusterStoreArango) {
+func WithClusterCollection(i connector.ArangoCollection) ClusterArangoOption {
+	return func(s *ClusterArango) {
 		if i != nil {
 			s.collection = i
 		}
@@ -40,7 +40,7 @@ func WithClusterCollection(i connector.ArangoCollection) ClusterStoreArangoOptio
 }
 
 // Save is ...
-func (s *ClusterStoreArango) Save(cluster *model.Cluster) (*model.Cluster, error) {
+func (s *ClusterArango) Save(cluster *model.Cluster) (*model.Cluster, error) {
 	meta, err := s.collection.CreateDocument(nil, cluster)
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (s *ClusterStoreArango) Save(cluster *model.Cluster) (*model.Cluster, error
 }
 
 // FetchByID is ...
-func (s *ClusterStoreArango) FetchByID(clusterID string) (*model.Cluster, error) {
+func (s *ClusterArango) FetchByID(clusterID string) (*model.Cluster, error) {
 	var cluster model.Cluster
 	s.collection.ReadDocument(nil, clusterID, &cluster)
 	cluster.ID = clusterID

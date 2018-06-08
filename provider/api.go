@@ -2,8 +2,6 @@ package provider
 
 import (
 	"net"
-
-	"github.com/kyamazawa/kube-factory/service"
 )
 
 // API is ...
@@ -17,11 +15,6 @@ func NewAPI(opts ...APIOption) *API {
 
 	for _, opt := range opts {
 		opt(provider)
-	}
-
-	if provider.factoryServer == nil {
-		factoryServer := service.NewFactoryServerHTTP()
-		provider.factoryServer = factoryServer
 	}
 
 	return provider

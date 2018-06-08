@@ -1,4 +1,4 @@
-package service
+package server
 
 import (
 	"fmt"
@@ -10,15 +10,15 @@ import (
 	"github.com/kyamazawa/kube-factory/components/factory"
 )
 
-// FactoryServerHTTP is ...
-type FactoryServerHTTP struct {
+// FactoryHTTP is ...
+type FactoryHTTP struct {
 	router  *mux.Router
 	factory factory.FactorySDK
 }
 
-// NewFactoryServerHTTP is ...
-func NewFactoryServerHTTP(opts ...FactoryServerHTTPOption) *FactoryServerHTTP {
-	service := &FactoryServerHTTP{router: mux.NewRouter()}
+// NewFactoryHTTP is ...
+func NewFactoryHTTP(opts ...FactoryHTTPOption) *FactoryHTTP {
+	service := &FactoryHTTP{router: mux.NewRouter()}
 
 	for _, opt := range opts {
 		opt(service)
@@ -34,12 +34,12 @@ func NewFactoryServerHTTP(opts ...FactoryServerHTTPOption) *FactoryServerHTTP {
 	return service
 }
 
-// FactoryServerHTTPOption is ...
-type FactoryServerHTTPOption func(*FactoryServerHTTP)
+// FactoryHTTPOption is ...
+type FactoryHTTPOption func(*FactoryHTTP)
 
 // WithFactorySDK is ...
-func WithFactorySDK(i factory.FactorySDK) FactoryServerHTTPOption {
-	return func(s *FactoryServerHTTP) {
+func WithFactorySDK(i factory.FactorySDK) FactoryHTTPOption {
+	return func(s *FactoryHTTP) {
 		if i != nil {
 			s.factory = i
 		}
@@ -47,7 +47,7 @@ func WithFactorySDK(i factory.FactorySDK) FactoryServerHTTPOption {
 }
 
 // Start is ...
-func (s *FactoryServerHTTP) Start() net.Listener {
+func (s *FactoryHTTP) Start() net.Listener {
 	l, err := net.Listen("tcp", fmt.Sprintf(":%d", 8080))
 	if err != nil {
 		log.Println(err)
@@ -60,11 +60,11 @@ func (s *FactoryServerHTTP) Start() net.Listener {
 	return l
 }
 
-func (s *FactoryServerHTTP) config() {
+func (s *FactoryHTTP) config() {
 	s.router.HandleFunc("/", s.rootHandler).Methods("GET")
 }
 
-func (s *FactoryServerHTTP) rootHandler(w http.ResponseWriter, r *http.Request) {
+func (s *FactoryHTTP) rootHandler(w http.ResponseWriter, r *http.Request) {
 	ret, err := s.factory.SomeUsecase()
 	println(ret)
 	println(err)

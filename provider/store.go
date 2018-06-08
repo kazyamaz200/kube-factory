@@ -2,7 +2,6 @@ package provider
 
 import (
 	"github.com/kyamazawa/kube-factory/model"
-	"github.com/kyamazawa/kube-factory/service"
 )
 
 // Store is ...
@@ -17,16 +16,6 @@ func NewStore(opts ...StoreOption) *Store {
 
 	for _, opt := range opts {
 		opt(provider)
-	}
-
-	if provider.userStore == nil {
-		userStore := service.NewUserStoreArango()
-		provider.userStore = userStore
-	}
-
-	if provider.clusterStore == nil {
-		clusterStore := service.NewClusterStoreArango()
-		provider.clusterStore = clusterStore
 	}
 
 	return provider

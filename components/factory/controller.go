@@ -8,16 +8,9 @@ type Controller struct {
 // NewController is ...
 func NewController(opts ...ControllerOption) *Controller {
 	controller := &Controller{}
-
 	for _, opt := range opts {
 		opt(controller)
 	}
-
-	if controller.interactor == nil {
-		interactor := NewInteractor()
-		controller.interactor = interactor
-	}
-
 	return controller
 }
 
@@ -33,8 +26,8 @@ func WithInteractor(i Interaction) ControllerOption {
 	}
 }
 
-// FactorySDK is ...
-type FactorySDK interface {
+// SDK is ...
+type SDK interface {
 	SomeUsecase() (*SomeUsecaseViewModel, error)
 }
 

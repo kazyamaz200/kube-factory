@@ -1,34 +1,19 @@
 package factory
 
-import (
-	"github.com/kyamazawa/kube-factory/model"
-	"github.com/kyamazawa/kube-factory/provider"
-)
+import "github.com/kyamazawa/kube-factory/provider"
 
 // Interactor is ...
 type Interactor struct {
 	presenter Presentation
-	store     Store
+	store     provider.StoreProtocol
 }
 
 // NewInteractor is ...
 func NewInteractor(opts ...InteractorOption) *Interactor {
 	interactor := &Interactor{}
-
 	for _, opt := range opts {
 		opt(interactor)
 	}
-
-	if interactor.presenter == nil {
-		presenter := NewPresenter()
-		interactor.presenter = presenter
-	}
-
-	if interactor.store == nil {
-		store := provider.NewStore()
-		interactor.store = store
-	}
-
 	return interactor
 }
 
@@ -45,20 +30,12 @@ func WithPresenter(p Presentation) InteractorOption {
 }
 
 // WithStore is ...
-func WithStore(p Store) InteractorOption {
+func WithStore(p provider.StoreProtocol) InteractorOption {
 	return func(s *Interactor) {
 		if p != nil {
 			s.store = p
 		}
 	}
-}
-
-// Store is ...
-type Store interface {
-	SaveUser(user *model.User) (*model.User, error)
-	FetchUserByID(userID string) (*model.User, error)
-	SaveCluster(cluster *model.Cluster) (*model.Cluster, error)
-	FetchClusterByID(clusterID string) (*model.Cluster, error)
 }
 
 // Interaction is ...

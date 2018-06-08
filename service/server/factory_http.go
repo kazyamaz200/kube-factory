@@ -8,12 +8,15 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/kyamazawa/kube-factory/components/factory"
+	"github.com/kyamazawa/kube-factory/connector"
+	"github.com/kyamazawa/kube-factory/provider"
+	"github.com/kyamazawa/kube-factory/service/store"
 )
 
 // FactoryHTTP is ...
 type FactoryHTTP struct {
-	router  *mux.Router
-	factory factory.FactorySDK
+	router *mux.Router
+	sdk    factory.SDK
 }
 
 // NewFactoryHTTP is ...
@@ -24,9 +27,22 @@ func NewFactoryHTTP(opts ...FactoryHTTPOption) *FactoryHTTP {
 		opt(service)
 	}
 
-	if service.factory == nil {
-		factorySDK := factory.NewController()
-		service.factory = factorySDK
+	if service.sdk == nil {
+		endpoints := []string{"http://localhost:8529"}
+		dbName := "test"
+		users := "users"
+		clusters := "clusters"
+
+		userCollection := connector.ConnectArangoCollection(endpoints, dbName, users)
+		clusterCollection := connector.ConnectArangoCollection(endpoints, dbName, clusters)
+		user := store.NewUserArango(store.WithUserCollection(userCollection))
+		cluster := store.NewClusterArango(store.WithClusterCollection(clusterCollection))
+		storeProvider := provider.NewStore(provider.WithUserStore(user), provider.WithClusterStore(cluster))
+		presenter := factory.NewPresenter()
+		interactor := factory.NewInteractor(factory.WithPresenter(presenter), factory.WithStore(storeProvider))
+		controller := factory.NewController(factory.WithInteractor(interactor))
+
+		service.sdk = controller
 	}
 
 	service.config()
@@ -37,11 +53,11 @@ func NewFactoryHTTP(opts ...FactoryHTTPOption) *FactoryHTTP {
 // FactoryHTTPOption is ...
 type FactoryHTTPOption func(*FactoryHTTP)
 
-// WithFactorySDK is ...
-func WithFactorySDK(i factory.FactorySDK) FactoryHTTPOption {
+// WithSDK is ...
+func WithSDK(i factory.SDK) FactoryHTTPOption {
 	return func(s *FactoryHTTP) {
 		if i != nil {
-			s.factory = i
+			s.sdk = i
 		}
 	}
 }
@@ -65,7 +81,7 @@ func (s *FactoryHTTP) config() {
 }
 
 func (s *FactoryHTTP) rootHandler(w http.ResponseWriter, r *http.Request) {
-	ret, err := s.factory.SomeUsecase()
+	ret, err := s.sdk.SomeUsecase()
 	println(ret)
 	println(err)
 }

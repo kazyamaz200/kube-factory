@@ -10,14 +10,24 @@ type Store struct {
 	clusterStore ClusterStore
 }
 
+// UserStore is ...
+type UserStore interface {
+	Save(user *model.User) (*model.User, error)
+	FetchByID(userID string) (*model.User, error)
+}
+
+// ClusterStore is ...
+type ClusterStore interface {
+	Save(cluster *model.Cluster) (*model.Cluster, error)
+	FetchByID(clusterID string) (*model.Cluster, error)
+}
+
 // NewStore is ...
 func NewStore(opts ...StoreOption) *Store {
 	provider := &Store{}
-
 	for _, opt := range opts {
 		opt(provider)
 	}
-
 	return provider
 }
 
@@ -42,16 +52,12 @@ func WithClusterStore(i ClusterStore) StoreOption {
 	}
 }
 
-// UserStore is ...
-type UserStore interface {
-	Save(user *model.User) (*model.User, error)
-	FetchByID(userID string) (*model.User, error)
-}
-
-// ClusterStore is ...
-type ClusterStore interface {
-	Save(cluster *model.Cluster) (*model.Cluster, error)
-	FetchByID(clusterID string) (*model.Cluster, error)
+// StoreProtocol is ...
+type StoreProtocol interface {
+	SaveUser(user *model.User) (*model.User, error)
+	FetchUserByID(userID string) (*model.User, error)
+	SaveCluster(cluster *model.Cluster) (*model.Cluster, error)
+	FetchClusterByID(clusterID string) (*model.Cluster, error)
 }
 
 // SaveUser is ...

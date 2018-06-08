@@ -16,14 +16,6 @@ func NewClusterArango(opts ...ClusterArangoOption) *ClusterArango {
 	for _, opt := range opts {
 		opt(service)
 	}
-
-	if service.collection == nil {
-		endpoints := []string{"http://localhost:8529"}
-		dbName := "test"
-		collectionName := "clusters"
-		service.collection = connector.ConnectArangoCollection(endpoints, dbName, collectionName)
-	}
-
 	return service
 }
 

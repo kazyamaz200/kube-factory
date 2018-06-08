@@ -16,14 +16,6 @@ func NewUserArango(opts ...UserArangoOption) *UserArango {
 	for _, opt := range opts {
 		opt(service)
 	}
-
-	if service.collection == nil {
-		endpoints := []string{"http://localhost:8529"}
-		dbName := "test"
-		collectionName := "users"
-		service.collection = connector.ConnectArangoCollection(endpoints, dbName, collectionName)
-	}
-
 	return service
 }
 

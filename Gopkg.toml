@@ -32,3 +32,11 @@
 [[constraint]]
   name = "github.com/gorilla/mux"
   version = "1.6.2"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/scaleway/go-scaleway"
+
+[[constraint]]
+  name = "github.com/cloudflare/cloudflare-go"
+  version = "0.8.5"

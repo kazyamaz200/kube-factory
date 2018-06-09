@@ -10,7 +10,7 @@
     "http",
     "util"
   ]
-  revision = "e9be214401cefd40e7d4e1aea6e8dadbb6e7a659"
+  revision = "ee31d12580ebb4e0fbd7c16d968334c6d54e41e7"
 
 [[projects]]
   branch = "master"

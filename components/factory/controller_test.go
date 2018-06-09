@@ -3,61 +3,17 @@ package factory
 import "testing"
 
 func TestNewController(t *testing.T) {
-	t.Run("create controller and it has interactor", func(t *testing.T) {
-		// Act
-		controller := NewController()
-
-		// Assert
-		actual := controller.interactor
-		if actual == nil {
-			t.Errorf("got: %v\nwant: %v", actual, "not nil")
-		}
-
-	})
-
-	t.Run("its interactor is compatible with Interaction", func(t *testing.T) {
-		// Arrange
-		expected := true
-
-		// Act
-		controller := NewController()
-
-		// Assert
-		_, actual := controller.interactor.(Interaction)
-		if actual != expected {
-			t.Errorf("got: %v\nwant: %v", actual, expected)
-		}
-	})
-
 	t.Run("its interactor is injectable", func(t *testing.T) {
 		// Arrange
-		i1 := NewInteractor()
-		i2 := &InteractorSpy{}
+		i := &InteractorSpy{}
 
 		// Act
-		controller := NewController(WithInteractor(i1))
+		controller := NewController(WithInteractor(i))
 
 		// Assert
-		actual := controller.interactor
-		if actual != i1 {
-			t.Errorf("got: %v\nwant: %v", actual, i1)
-		}
-		if actual == i2 {
-			t.Errorf("got: %v\nwant: %v", actual, i2)
-		}
-	})
-
-	t.Run("its interactor is not be nil", func(t *testing.T) {
-		// Arrange
-		var i1 *Interactor // nil
-
-		// Act
-		controller := NewController(WithInteractor(i1))
-
-		// Assert
-		actual := controller.interactor
-		if actual == nil {
-			t.Errorf("got: %v\nwant: %v", actual, "not nil")
+		_, ok := controller.interactor.(Interaction)
+		if !ok {
+			t.Errorf("got: %v\nwant: %v", ok, true)
 		}
 	})
 }

@@ -8,61 +8,17 @@ import (
 )
 
 func TestNewFactoryHTTP(t *testing.T) {
-	t.Run("create service and it has sdk and router", func(t *testing.T) {
-		// Act
-		service := NewFactoryHTTP()
-
-		// Assert
-		sdk := service.factory
-		router := service.router
-		if sdk == nil {
-			t.Errorf("got: %v\nwant: %v", sdk, "not nil")
-		}
-		if router == nil {
-			t.Errorf("got: %v\nwant: %v", router, "not nil")
-		}
-	})
-
-	t.Run("its sdk is compatible with factory.FactorySDK", func(t *testing.T) {
-		// Arrange
-		expected := true
-
-		// Act
-		service := NewFactoryHTTP()
-
-		// Assert
-		_, actual := service.factory.(factory.FactorySDK)
-		if actual != expected {
-			t.Errorf("got: %v\nwant: %v", actual, expected)
-		}
-	})
-
 	t.Run("its sdk is injectable", func(t *testing.T) {
 		// Arrange
-		i1 := factory.NewController()
-		i2 := &FactorySDKSpy{}
+		i := &FactorySDKSpy{}
 
 		// Act
-		service := NewFactoryHTTP(WithFactorySDK(i1))
+		service := NewFactoryHTTP(WithSDK(i))
 
 		// Assert
-		actual := service.factory
-		if actual != i1 {
-			t.Errorf("got: %v\nwant: %v", actual, i1)
-		}
-		if actual == i2 {
-			t.Errorf("got: %v\nwant: %v", actual, i2)
-		}
-	})
-
-	t.Run("its sdk is not be nil", func(t *testing.T) {
-		// Act
-		service := NewFactoryHTTP(WithFactorySDK(nil))
-
-		// Assert
-		actual := service.factory
-		if actual == nil {
-			t.Errorf("got: %v\nwant: %v", actual, "not nil")
+		_, ok := service.sdk.(factory.SDK)
+		if !ok {
+			t.Errorf("got: %v\nwant: %v", ok, true)
 		}
 	})
 }
@@ -115,7 +71,7 @@ func TestFactoryHTTP_rootHandler(t *testing.T) {
 		// Arrange
 		mockVM := &factory.SomeUsecaseViewModel{}
 		spy := &FactorySDKSpy{SomeUsecaseCalled: false, SomeUsecaseViewModelBox: mockVM}
-		service := NewFactoryHTTP(WithFactorySDK(spy))
+		service := NewFactoryHTTP(WithSDK(spy))
 
 		// Act
 		service.rootHandler(nil, nil)

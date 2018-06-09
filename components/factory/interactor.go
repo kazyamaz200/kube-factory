@@ -6,6 +6,8 @@ import "github.com/kyamazawa/kube-factory/provider"
 type Interactor struct {
 	presenter Presentation
 	store     provider.StoreProtocol
+	node      provider.NodeProtocol
+	dns       provider.DNSProtocol
 }
 
 // NewInteractor is ...
@@ -34,6 +36,24 @@ func WithStore(p provider.StoreProtocol) InteractorOption {
 	return func(s *Interactor) {
 		if p != nil {
 			s.store = p
+		}
+	}
+}
+
+// WithNode is ...
+func WithNode(p provider.NodeProtocol) InteractorOption {
+	return func(s *Interactor) {
+		if p != nil {
+			s.node = p
+		}
+	}
+}
+
+// WithDNS is ...
+func WithDNS(p provider.DNSProtocol) InteractorOption {
+	return func(s *Interactor) {
+		if p != nil {
+			s.dns = p
 		}
 	}
 }

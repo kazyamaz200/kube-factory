@@ -5,39 +5,64 @@ import (
 
 	"github.com/kyamazawa/kube-factory/components/factory"
 	"github.com/kyamazawa/kube-factory/provider"
+	"github.com/kyamazawa/kube-factory/service/dns"
+	"github.com/kyamazawa/kube-factory/service/node"
 	"github.com/kyamazawa/kube-factory/service/server"
 	"github.com/kyamazawa/kube-factory/service/store"
 )
 
 func main() {
+	ch := make(chan bool)
+	component := setup()
+	server := server.NewFactoryHTTP(server.WithSDK(component))
+	daemon := provider.NewAPI(provider.WithFactoryServer(server))
+	go daemon.Activate()
+	log.Println(<-ch)
+}
+
+func setup() factory.SDK {
 	endpoints := []string{"http://localhost:8529"}
 	dbName := "test"
+	userName := "testuser"
+	password := "testpass"
+	usersCol := "users"
+	clustersCol := "clusters"
 
-	u := store.NewUserArango(
-		store.WithUserCollection(store.ConnectArangoCollection(endpoints, dbName, "users")),
+	// services
+	users := store.NewUserArango(
+		store.WithUserCollection(store.ConnectArangoCollection(endpoints, dbName, userName, password, usersCol)),
+	)
+	clusters := store.NewClusterArango(
+		store.WithClusterCollection(store.ConnectArangoCollection(endpoints, dbName, userName, password, clustersCol)),
+	)
+	scaleway := node.NewScaleway(
+		node.WithSDK(nil),
+	)
+	cloudflare := dns.NewCloudflare(
+		dns.WithSDK(nil),
 	)
 
-	c := store.NewClusterArango(
-		store.WithClusterCollection(store.ConnectArangoCollection(endpoints, dbName, "clusters")),
+	// providers
+	storeProvider := provider.NewStore(
+		provider.WithUserStore(users),
+		provider.WithClusterStore(clusters),
+	)
+	nodeProvider := provider.NewNode(
+		provider.WithNodeService(scaleway),
+	)
+	dnsProvider := provider.NewDNS(
+		provider.WithDNSService(cloudflare),
 	)
 
-	s := provider.NewStore(
-		provider.WithUserStore(u),
-		provider.WithClusterStore(c),
+	// component
+	factory := factory.NewController(
+		factory.WithInteractor(factory.NewInteractor(
+			factory.WithPresenter(factory.NewPresenter()),
+			factory.WithStore(storeProvider),
+			factory.WithNode(nodeProvider),
+			factory.WithDNS(dnsProvider),
+		)),
 	)
 
-	p := factory.NewPresenter()
-
-	i := factory.NewInteractor(
-		factory.WithPresenter(p),
-		factory.WithStore(s),
-	)
-
-	sdk := factory.NewController(factory.WithInteractor(i))
-	server := server.NewFactoryHTTP(server.WithSDK(sdk))
-	api := provider.NewAPI(provider.WithFactoryServer(server))
-
-	ch := make(chan bool)
-	go api.Activate()
-	log.Println(<-ch)
+	return factory
 }

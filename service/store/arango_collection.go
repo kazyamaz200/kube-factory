@@ -9,7 +9,7 @@ import (
 type ArangoCollection = driver.CollectionDocuments
 
 // ConnectArangoCollection is ...
-func ConnectArangoCollection(endpoints []string, dbName string, collectionName string) ArangoCollection {
+func ConnectArangoCollection(endpoints []string, dbName string, userName string, password string, collectionName string) ArangoCollection {
 	conn, err := http.NewConnection(http.ConnectionConfig{
 		Endpoints: endpoints,
 	})
@@ -17,7 +17,7 @@ func ConnectArangoCollection(endpoints []string, dbName string, collectionName s
 		panic(err)
 	}
 
-	credentials := driver.BasicAuthentication("testuser", "testuser")
+	credentials := driver.BasicAuthentication(userName, password)
 	client, err := driver.NewClient(driver.ClientConfig{
 		Connection:     conn,
 		Authentication: credentials,

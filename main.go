@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/kyamazawa/kube-factory/components/factory"
-	"github.com/kyamazawa/kube-factory/connector"
 	"github.com/kyamazawa/kube-factory/provider"
 	"github.com/kyamazawa/kube-factory/service/server"
 	"github.com/kyamazawa/kube-factory/service/store"
@@ -15,11 +14,11 @@ func main() {
 	dbName := "test"
 
 	u := store.NewUserArango(
-		store.WithUserCollection(connector.ConnectArangoCollection(endpoints, dbName, "users")),
+		store.WithUserCollection(store.ConnectArangoCollection(endpoints, dbName, "users")),
 	)
 
 	c := store.NewClusterArango(
-		store.WithClusterCollection(connector.ConnectArangoCollection(endpoints, dbName, "clusters")),
+		store.WithClusterCollection(store.ConnectArangoCollection(endpoints, dbName, "clusters")),
 	)
 
 	s := provider.NewStore(

@@ -1,13 +1,10 @@
 package store
 
-import (
-	"github.com/kyamazawa/kube-factory/connector"
-	"github.com/kyamazawa/kube-factory/model"
-)
+import "github.com/kyamazawa/kube-factory/model"
 
 // UserArango is ...
 type UserArango struct {
-	collection connector.ArangoCollection
+	collection ArangoCollection
 }
 
 // NewUserArango is ...
@@ -23,7 +20,7 @@ func NewUserArango(opts ...UserArangoOption) *UserArango {
 type UserArangoOption func(*UserArango)
 
 // WithUserCollection is ...
-func WithUserCollection(i connector.ArangoCollection) UserArangoOption {
+func WithUserCollection(i ArangoCollection) UserArangoOption {
 	return func(s *UserArango) {
 		if i != nil {
 			s.collection = i

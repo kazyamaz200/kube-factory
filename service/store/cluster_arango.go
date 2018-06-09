@@ -1,13 +1,10 @@
 package store
 
-import (
-	"github.com/kyamazawa/kube-factory/connector"
-	"github.com/kyamazawa/kube-factory/model"
-)
+import "github.com/kyamazawa/kube-factory/model"
 
 // ClusterArango is ...
 type ClusterArango struct {
-	collection connector.ArangoCollection
+	collection ArangoCollection
 }
 
 // NewClusterArango is ...
@@ -23,7 +20,7 @@ func NewClusterArango(opts ...ClusterArangoOption) *ClusterArango {
 type ClusterArangoOption func(*ClusterArango)
 
 // WithClusterCollection is ...
-func WithClusterCollection(i connector.ArangoCollection) ClusterArangoOption {
+func WithClusterCollection(i ArangoCollection) ClusterArangoOption {
 	return func(s *ClusterArango) {
 		if i != nil {
 			s.collection = i

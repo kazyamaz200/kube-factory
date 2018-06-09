@@ -1,4 +1,4 @@
-package connector
+package store
 
 import (
 	driver "github.com/arangodb/go-driver"

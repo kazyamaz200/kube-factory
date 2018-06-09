@@ -30,9 +30,44 @@
   revision = "e3702bed27f0d39777b0b37b664b6280e8ef8fbf"
   version = "v1.6.2"
 
+[[projects]]
+  name = "github.com/moul/anonuuid"
+  packages = ["."]
+  revision = "c6987e46f8a0231504bcd402962749f8dd9970b0"
+  version = "v1.1.0"
+
+[[projects]]
+  name = "github.com/renstrom/fuzzysearch"
+  packages = ["fuzzy"]
+  revision = "d4ca9dfccd55dc6b076f9880d49c35315922c1f4"
+  version = "v1.0.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/scaleway/go-scaleway"
+  packages = [
+    ".",
+    "cache",
+    "logger",
+    "types"
+  ]
+  revision = "f8c3b31c65867b4cb96b3bd41e574c33fd1d69ae"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = ["context"]
+  revision = "1e491301e022f8f977054da4c2d852decd59571f"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/sync"
+  packages = ["errgroup"]
+  revision = "1d60e4601c6fd243af51cc01ddf169918a5407ca"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "fbb90962b5206862731caa9ea8856bd633d6fdadab29db4c9319953bfac64fae"
+  inputs-digest = "81e4b00b6ef7a8167a7805c4b298b843fdbada11a47adebeb81d4a930917104d"
   solver-name = "gps-cdcl"
   solver-version = 1

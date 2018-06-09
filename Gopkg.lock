@@ -19,6 +19,12 @@
   revision = "c899a2a2271f97f297fd70afd031e5ffb9497f83"
 
 [[projects]]
+  name = "github.com/cloudflare/cloudflare-go"
+  packages = ["."]
+  revision = "1f9007fbecae20711133c60519338c41cef1ffb4"
+  version = "v0.8.5"
+
+[[projects]]
   name = "github.com/gorilla/context"
   packages = ["."]
   revision = "08b5f424b9271eedf6f9f0ce86cb9396ed337a42"
@@ -35,6 +41,12 @@
   packages = ["."]
   revision = "c6987e46f8a0231504bcd402962749f8dd9970b0"
   version = "v1.1.0"
+
+[[projects]]
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
+  version = "v0.8.0"
 
 [[projects]]
   name = "github.com/renstrom/fuzzysearch"
@@ -65,9 +77,15 @@
   packages = ["errgroup"]
   revision = "1d60e4601c6fd243af51cc01ddf169918a5407ca"
 
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/time"
+  packages = ["rate"]
+  revision = "fbb02b2291d28baffd63558aa44b4b56f178d650"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "81e4b00b6ef7a8167a7805c4b298b843fdbada11a47adebeb81d4a930917104d"
+  inputs-digest = "1a122acc8cf5f24f7b839b1ba79a0fc96497c598cd964c854d265fb5b6486f69"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -21,12 +21,21 @@ func main() {
 }
 
 func setup() factory.SDK {
+	// arango
 	endpoints := []string{"http://localhost:8529"}
 	dbName := "test"
 	userName := "testuser"
 	password := "testpass"
 	usersCol := "users"
 	clustersCol := "clusters"
+	// scaleway
+	org := ""
+	token := ""
+	ug := ""
+	region := ""
+	// cloudflare
+	key := ""
+	email := ""
 
 	// services
 	users := store.NewUserArango(
@@ -36,10 +45,10 @@ func setup() factory.SDK {
 		store.WithClusterCollection(store.ConnectArangoCollection(endpoints, dbName, userName, password, clustersCol)),
 	)
 	scaleway := node.NewScaleway(
-		node.WithSDK(nil),
+		node.WithSDK(node.ScalewayClient(org, token, ug, region)),
 	)
 	cloudflare := dns.NewCloudflare(
-		dns.WithSDK(nil),
+		dns.WithSDK(dns.CloudflareClient(key, email)),
 	)
 
 	// providers

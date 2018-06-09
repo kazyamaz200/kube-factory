@@ -31,7 +31,7 @@ func setup() factory.SDK {
 	// scaleway
 	org := ""
 	token := ""
-	ug := ""
+	ua := ""
 	region := ""
 	// cloudflare
 	key := ""
@@ -45,7 +45,7 @@ func setup() factory.SDK {
 		store.WithClusterCollection(store.ConnectArangoCollection(endpoints, dbName, userName, password, clustersCol)),
 	)
 	scaleway := node.NewScaleway(
-		node.WithSDK(node.ScalewayClient(org, token, ug, region)),
+		node.WithSDK(node.ScalewayClient(org, token, ua, region)),
 	)
 	cloudflare := dns.NewCloudflare(
 		dns.WithSDK(dns.CloudflareClient(key, email)),

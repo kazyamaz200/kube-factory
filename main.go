@@ -13,21 +13,32 @@ import (
 func main() {
 	endpoints := []string{"http://localhost:8529"}
 	dbName := "test"
-	users := "users"
-	clusters := "clusters"
 
-	userCollection := connector.ConnectArangoCollection(endpoints, dbName, users)
-	clusterCollection := connector.ConnectArangoCollection(endpoints, dbName, clusters)
-	user := store.NewUserArango(store.WithUserCollection(userCollection))
-	cluster := store.NewClusterArango(store.WithClusterCollection(clusterCollection))
-	storeProvider := provider.NewStore(provider.WithUserStore(user), provider.WithClusterStore(cluster))
-	presenter := factory.NewPresenter()
-	interactor := factory.NewInteractor(factory.WithPresenter(presenter), factory.WithStore(storeProvider))
-	controller := factory.NewController(factory.WithInteractor(interactor))
+	u := store.NewUserArango(
+		store.WithUserCollection(connector.ConnectArangoCollection(endpoints, dbName, "users")),
+	)
+
+	c := store.NewClusterArango(
+		store.WithClusterCollection(connector.ConnectArangoCollection(endpoints, dbName, "clusters")),
+	)
+
+	s := provider.NewStore(
+		provider.WithUserStore(u),
+		provider.WithClusterStore(c),
+	)
+
+	p := factory.NewPresenter()
+
+	i := factory.NewInteractor(
+		factory.WithPresenter(p),
+		factory.WithStore(s),
+	)
+
+	sdk := factory.NewController(factory.WithInteractor(i))
+	server := server.NewFactoryHTTP(server.WithSDK(sdk))
+	api := provider.NewAPI(provider.WithFactoryServer(server))
 
 	ch := make(chan bool)
-	server := server.NewFactoryHTTP(server.WithSDK(controller))
-	api := provider.NewAPI(provider.WithFactoryServer(server))
 	go api.Activate()
 	log.Println(<-ch)
 }

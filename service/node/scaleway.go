@@ -27,3 +27,38 @@ func WithSDK(i ScalewayAPI) ScalewayOption {
 		}
 	}
 }
+
+// CreateNode is ...
+func (s *Scaleway) CreateNode(name string, clusterID string) error {
+	image := "image:ubuntu-mini-xenial-25g"
+	arch := "x86_64"
+	commercialType := "START1-XS"
+
+	imageID, err := s.sdk.GetImageID(image, arch)
+	if err != nil {
+		return err
+	}
+
+	req := ScalewayServerDefinition{
+		Name:           name,
+		CommercialType: commercialType,
+		Image:          &imageID.Identifier,
+		Tags:           []string{clusterID},
+	}
+
+	serverID, err := s.sdk.PostServer(req)
+	if err != nil {
+		return err
+	}
+
+	server, err := s.sdk.GetServerID(serverID)
+	if err != nil {
+		return err
+	}
+
+	if err = s.sdk.PostServerAction(server, "poweron"); err != nil {
+		return err
+	}
+
+	return nil
+}

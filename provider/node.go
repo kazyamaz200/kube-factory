@@ -7,6 +7,7 @@ type Node struct {
 
 // NodeService is ...
 type NodeService interface {
+	CreateNode(name string, clusterID string) error
 }
 
 // NewNode is ...

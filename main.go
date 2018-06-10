@@ -32,7 +32,7 @@ func setup() factory.SDK {
 	org := ""
 	token := ""
 	ua := ""
-	region := ""
+	region := "par1"
 	// cloudflare
 	key := ""
 	email := ""

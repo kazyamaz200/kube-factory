@@ -1,13 +1,13 @@
 package factory
 
-// SomeUsecaseRequest is ...
-type SomeUsecaseRequest struct {
+// CreateClusterRequest is ...
+type CreateClusterRequest struct {
 }
 
-// SomeUsecaseResponse is ...
-type SomeUsecaseResponse struct {
+// CreateClusterResponse is ...
+type CreateClusterResponse struct {
 }
 
-// SomeUsecaseViewModel is ...
-type SomeUsecaseViewModel struct {
+// CreateClusterViewModel is ...
+type CreateClusterViewModel struct {
 }

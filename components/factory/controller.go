@@ -28,17 +28,17 @@ func WithInteractor(i Interaction) ControllerOption {
 
 // SDK is ...
 type SDK interface {
-	SomeUsecase() (*SomeUsecaseViewModel, error)
+	CreateCluster() (*CreateClusterViewModel, error)
 }
 
-// SomeUsecase is ...
-func (s *Controller) SomeUsecase() (*SomeUsecaseViewModel, error) {
-	channel := make(chan func() (*SomeUsecaseViewModel, error))
+// CreateCluster is ...
+func (s *Controller) CreateCluster() (*CreateClusterViewModel, error) {
+	channel := make(chan func() (*CreateClusterViewModel, error))
 	defer close(channel)
 
-	req := &SomeUsecaseRequest{}
-	go s.interactor.DoSomeUsecase(req, func(vm *SomeUsecaseViewModel, err error) {
-		channel <- (func() (*SomeUsecaseViewModel, error) { return vm, err })
+	req := &CreateClusterRequest{}
+	go s.interactor.DoCreateCluster(req, func(vm *CreateClusterViewModel, err error) {
+		channel <- (func() (*CreateClusterViewModel, error) { return vm, err })
 	})
 
 	ret, err := (<-channel)()

@@ -60,11 +60,11 @@ func WithDNS(p provider.DNSProtocol) InteractorOption {
 
 // Interaction is ...
 type Interaction interface {
-	DoSomeUsecase(req *SomeUsecaseRequest, callback func(*SomeUsecaseViewModel, error))
+	DoCreateCluster(req *CreateClusterRequest, callback func(*CreateClusterViewModel, error))
 }
 
-// DoSomeUsecase is ...
-func (s *Interactor) DoSomeUsecase(req *SomeUsecaseRequest, callback func(*SomeUsecaseViewModel, error)) {
-	res := &SomeUsecaseResponse{}
-	s.presenter.PresentSomeUsecase(res, callback)
+// DoCreateCluster is ...
+func (s *Interactor) DoCreateCluster(req *CreateClusterRequest, callback func(*CreateClusterViewModel, error)) {
+	res := &CreateClusterResponse{}
+	s.presenter.PresentCreateCluster(res, callback)
 }

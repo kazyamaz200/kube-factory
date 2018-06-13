@@ -19,33 +19,33 @@ func TestNewInteractor(t *testing.T) {
 }
 
 type PresenterSpy struct {
-	PresentSomeUsecaseCalled bool
-	SomeUsecaseViewModelBox  *SomeUsecaseViewModel
-	SomeUsecaseResponseBox   *SomeUsecaseResponse
+	PresentCreateClusterCalled bool
+	CreateClusterViewModelBox  *CreateClusterViewModel
+	CreateClusterResponseBox   *CreateClusterResponse
 }
 
-func (s *PresenterSpy) PresentSomeUsecase(res *SomeUsecaseResponse, callback func(*SomeUsecaseViewModel, error)) {
-	s.PresentSomeUsecaseCalled = true
-	s.SomeUsecaseResponseBox = res
-	callback(s.SomeUsecaseViewModelBox, nil)
+func (s *PresenterSpy) PresentCreateCluster(res *CreateClusterResponse, callback func(*CreateClusterViewModel, error)) {
+	s.PresentCreateClusterCalled = true
+	s.CreateClusterResponseBox = res
+	callback(s.CreateClusterViewModelBox, nil)
 }
-func TestInteractor_DoSomeUsecase(t *testing.T) {
-	t.Run("call PresentSomeUsecase with SomeUsecaseResponse", func(t *testing.T) {
+func TestInteractor_DoCreateCluster(t *testing.T) {
+	t.Run("call PresentCreateCluster with CreateClusterResponse", func(t *testing.T) {
 		// Arrange
-		spy := &PresenterSpy{PresentSomeUsecaseCalled: false}
+		spy := &PresenterSpy{PresentCreateClusterCalled: false}
 		interactor := NewInteractor(WithPresenter(spy))
-		req := &SomeUsecaseRequest{}
-		callback := func(*SomeUsecaseViewModel, error) {}
+		req := &CreateClusterRequest{}
+		callback := func(*CreateClusterViewModel, error) {}
 
 		// Act
-		interactor.DoSomeUsecase(req, callback)
+		interactor.DoCreateCluster(req, callback)
 
 		// Assert
-		called := spy.PresentSomeUsecaseCalled
+		called := spy.PresentCreateClusterCalled
 		if called != true {
 			t.Errorf("got: %v\nwant: %v", called, true)
 		}
-		send := spy.SomeUsecaseResponseBox
+		send := spy.CreateClusterResponseBox
 		if send == nil {
 			t.Errorf("got: %v\nwant: %v", send, "not nil")
 		}

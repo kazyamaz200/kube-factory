@@ -2,18 +2,18 @@ package factory
 
 import "testing"
 
-func TestPresenter_PresentSomeUsecase(t *testing.T) {
-	t.Run("call received callback with SomeUsecaseViewModel and error", func(t *testing.T) {
+func TestPresenter_PresentCreateCluster(t *testing.T) {
+	t.Run("call received callback with CreateClusterViewModel and error", func(t *testing.T) {
 		// Arrange
 		presenter := NewPresenter()
-		res := &SomeUsecaseResponse{}
+		res := &CreateClusterResponse{}
 		called := false
-		var boxVM *SomeUsecaseViewModel
+		var boxVM *CreateClusterViewModel
 		var boxError error
-		callback := func(vm *SomeUsecaseViewModel, err error) { called = true; boxVM = vm; boxError = err }
+		callback := func(vm *CreateClusterViewModel, err error) { called = true; boxVM = vm; boxError = err }
 
 		// Act
-		presenter.PresentSomeUsecase(res, callback)
+		presenter.PresentCreateCluster(res, callback)
 
 		// Assert
 		if called != true {

@@ -19,26 +19,26 @@ func TestNewController(t *testing.T) {
 }
 
 type InteractorSpy struct {
-	DoSomeUsecaseCalled     bool
-	SomeUsecaseViewModelBox *SomeUsecaseViewModel
-	SomeUsecaseRequestBox   *SomeUsecaseRequest
+	DoCreateClusterCalled     bool
+	CreateClusterViewModelBox *CreateClusterViewModel
+	CreateClusterRequestBox   *CreateClusterRequest
 }
 
-func (s *InteractorSpy) DoSomeUsecase(req *SomeUsecaseRequest, callback func(*SomeUsecaseViewModel, error)) {
-	s.DoSomeUsecaseCalled = true
-	s.SomeUsecaseRequestBox = req
-	callback(s.SomeUsecaseViewModelBox, nil)
+func (s *InteractorSpy) DoCreateCluster(req *CreateClusterRequest, callback func(*CreateClusterViewModel, error)) {
+	s.DoCreateClusterCalled = true
+	s.CreateClusterRequestBox = req
+	callback(s.CreateClusterViewModelBox, nil)
 }
 
-func TestController_SomeUsecase(t *testing.T) {
-	t.Run("return SomeUsecaseViewModel and error", func(t *testing.T) {
+func TestController_CreateCluster(t *testing.T) {
+	t.Run("return CreateClusterViewModel and error", func(t *testing.T) {
 		// Arrange
-		mockVM := &SomeUsecaseViewModel{}
-		spy := &InteractorSpy{SomeUsecaseViewModelBox: mockVM}
+		mockVM := &CreateClusterViewModel{}
+		spy := &InteractorSpy{CreateClusterViewModelBox: mockVM}
 		controller := NewController(WithInteractor(spy))
 
 		// Act
-		actual, err := controller.SomeUsecase()
+		actual, err := controller.CreateCluster()
 
 		// Assert
 		if actual != mockVM {
@@ -49,21 +49,21 @@ func TestController_SomeUsecase(t *testing.T) {
 		}
 	})
 
-	t.Run("call DoSomeUsecase with SomeUsecaseRequest", func(t *testing.T) {
+	t.Run("call DoCreateCluster with CreateClusterRequest", func(t *testing.T) {
 		// Arrange
-		mockVM := &SomeUsecaseViewModel{}
-		spy := &InteractorSpy{DoSomeUsecaseCalled: false, SomeUsecaseViewModelBox: mockVM}
+		mockVM := &CreateClusterViewModel{}
+		spy := &InteractorSpy{DoCreateClusterCalled: false, CreateClusterViewModelBox: mockVM}
 		controller := NewController(WithInteractor(spy))
 
 		// Act
-		controller.SomeUsecase()
+		controller.CreateCluster()
 
 		// Assert
-		called := spy.DoSomeUsecaseCalled
+		called := spy.DoCreateClusterCalled
 		if called != true {
 			t.Errorf("got: %v\nwant: %v", called, true)
 		}
-		send := spy.SomeUsecaseRequestBox
+		send := spy.CreateClusterRequestBox
 		if send == nil {
 			t.Errorf("got: %v\nwant: %v", send, "not nil")
 		}

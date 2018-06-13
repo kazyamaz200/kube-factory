@@ -15,11 +15,11 @@ type PresenterOption func(*Presenter)
 
 // Presentation is ...
 type Presentation interface {
-	PresentSomeUsecase(res *SomeUsecaseResponse, callback func(*SomeUsecaseViewModel, error))
+	PresentCreateCluster(res *CreateClusterResponse, callback func(*CreateClusterViewModel, error))
 }
 
-// PresentSomeUsecase is ...
-func (s *Presenter) PresentSomeUsecase(res *SomeUsecaseResponse, callback func(*SomeUsecaseViewModel, error)) {
-	vm := &SomeUsecaseViewModel{}
+// PresentCreateCluster is ...
+func (s *Presenter) PresentCreateCluster(res *CreateClusterResponse, callback func(*CreateClusterViewModel, error)) {
+	vm := &CreateClusterViewModel{}
 	callback(vm, nil)
 }

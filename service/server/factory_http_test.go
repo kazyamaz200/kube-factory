@@ -57,27 +57,27 @@ func TestFactoryHTTP_Start(t *testing.T) {
 }
 
 type FactorySDKSpy struct {
-	SomeUsecaseCalled       bool
-	SomeUsecaseViewModelBox *factory.SomeUsecaseViewModel
+	CreateClusterCalled       bool
+	CreateClusterViewModelBox *factory.CreateClusterViewModel
 }
 
-func (s *FactorySDKSpy) SomeUsecase() (*factory.SomeUsecaseViewModel, error) {
-	s.SomeUsecaseCalled = true
-	return s.SomeUsecaseViewModelBox, nil
+func (s *FactorySDKSpy) CreateCluster() (*factory.CreateClusterViewModel, error) {
+	s.CreateClusterCalled = true
+	return s.CreateClusterViewModelBox, nil
 }
 
 func TestFactoryHTTP_rootHandler(t *testing.T) {
-	t.Run("call SomeUsecase", func(t *testing.T) {
+	t.Run("call CreateCluster", func(t *testing.T) {
 		// Arrange
-		mockVM := &factory.SomeUsecaseViewModel{}
-		spy := &FactorySDKSpy{SomeUsecaseCalled: false, SomeUsecaseViewModelBox: mockVM}
+		mockVM := &factory.CreateClusterViewModel{}
+		spy := &FactorySDKSpy{CreateClusterCalled: false, CreateClusterViewModelBox: mockVM}
 		service := NewFactoryHTTP(WithSDK(spy))
 
 		// Act
 		service.rootHandler(nil, nil)
 
 		// Assert
-		called := spy.SomeUsecaseCalled
+		called := spy.CreateClusterCalled
 		if called != true {
 			t.Errorf("got: %v\nwant: %v", called, true)
 		}

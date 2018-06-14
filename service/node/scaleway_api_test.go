@@ -9,6 +9,7 @@ import (
 
 func TestAPI(t *testing.T) {
 	t.Run("", func(t *testing.T) {
+		t.Skip("skip")
 		organization := ""
 		token := ""
 		userAgent := ""

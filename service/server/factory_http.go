@@ -60,7 +60,7 @@ func (s *FactoryHTTP) config() {
 }
 
 func (s *FactoryHTTP) rootHandler(w http.ResponseWriter, r *http.Request) {
-	ret, err := s.sdk.SomeUsecase()
+	ret, err := s.sdk.CreateCluster()
 	println(ret)
 	println(err)
 }

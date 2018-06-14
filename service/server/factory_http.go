@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net"
@@ -60,7 +61,14 @@ func (s *FactoryHTTP) config() {
 }
 
 func (s *FactoryHTTP) rootHandler(w http.ResponseWriter, r *http.Request) {
-	ret, err := s.sdk.CreateCluster()
-	println(ret)
-	println(err)
+	w.Header().Set("Content-Type", "application/json")
+	var body []byte
+	result, err := s.sdk.CreateCluster()
+	if err != nil {
+		w.WriteHeader(400)
+		body, _ = json.Marshal(err)
+	} else {
+		body, _ = json.Marshal(result)
+	}
+	w.Write(body)
 }

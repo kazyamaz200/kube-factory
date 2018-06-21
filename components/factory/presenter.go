@@ -20,6 +20,6 @@ type Presentation interface {
 
 // PresentCreateCluster is ...
 func (s *Presenter) PresentCreateCluster(res *CreateClusterResponse, callback func(*CreateClusterViewModel, error)) {
-	vm := &CreateClusterViewModel{}
+	vm := &CreateClusterViewModel{ID: res.ID}
 	callback(vm, nil)
 }

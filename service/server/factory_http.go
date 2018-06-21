@@ -57,18 +57,21 @@ func (s *FactoryHTTP) Start() net.Listener {
 }
 
 func (s *FactoryHTTP) config() {
-	s.router.HandleFunc("/", s.rootHandler).Methods("GET")
+	s.router.HandleFunc("/api/clusters", s.postClusters).Methods("POST")
 }
 
-func (s *FactoryHTTP) rootHandler(w http.ResponseWriter, r *http.Request) {
+func (s *FactoryHTTP) postClusters(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	var body []byte
+
 	result, err := s.sdk.CreateCluster()
+
+	var body []byte
 	if err != nil {
 		w.WriteHeader(400)
 		body, _ = json.Marshal(err)
 	} else {
 		body, _ = json.Marshal(result)
 	}
+
 	w.Write(body)
 }

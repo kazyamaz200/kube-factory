@@ -28,20 +28,45 @@ func WithClusterCollection(i ArangoCollection) ClusterArangoOption {
 	}
 }
 
+// Cluster is ...
+type Cluster struct {
+	Key string `json:"_key,omitempty"`
+}
+
+func (s *ClusterArango) fromEntity(e *model.Cluster) *Cluster {
+	ret := &Cluster{
+		Key: e.ID,
+	}
+	return ret
+}
+
+func (s *ClusterArango) toEntity(e *Cluster) *model.Cluster {
+	ret := &model.Cluster{
+		ID: e.Key,
+	}
+	return ret
+}
+
 // Save is ...
-func (s *ClusterArango) Save(cluster *model.Cluster) (*model.Cluster, error) {
-	meta, err := s.collection.CreateDocument(nil, cluster)
+func (s *ClusterArango) Save(entity *model.Cluster) (*model.Cluster, error) {
+	c := s.fromEntity(entity)
+
+	meta, err := s.collection.CreateDocument(nil, c)
 	if err != nil {
 		return nil, err
 	}
-	cluster.ID = meta.Key
-	return cluster, nil
+	c.Key = meta.Key
+
+	entity = s.toEntity(c)
+	return entity, nil
 }
 
-// FetchByID is ...
-func (s *ClusterArango) FetchByID(clusterID string) (*model.Cluster, error) {
-	var cluster model.Cluster
-	s.collection.ReadDocument(nil, clusterID, &cluster)
-	cluster.ID = clusterID
-	return &cluster, nil
+// Fetch is ...
+func (s *ClusterArango) Fetch(entity *model.Cluster) (*model.Cluster, error) {
+	c := s.fromEntity(entity)
+
+	s.collection.ReadDocument(nil, c.Key, &c)
+
+	entity = s.toEntity(c)
+	return entity, nil
 }

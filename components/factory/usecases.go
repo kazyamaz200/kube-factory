@@ -6,9 +6,10 @@ type CreateClusterRequest struct {
 
 // CreateClusterResponse is ...
 type CreateClusterResponse struct {
+	ID string
 }
 
 // CreateClusterViewModel is ...
 type CreateClusterViewModel struct {
-	Name string `json:"name"`
+	ID string `json:"id"`
 }

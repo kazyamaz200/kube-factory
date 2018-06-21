@@ -28,20 +28,45 @@ func WithUserCollection(i ArangoCollection) UserArangoOption {
 	}
 }
 
+// User is ...
+type User struct {
+	Key string `json:"_key,omitempty"`
+}
+
+func (s *UserArango) fromEntity(e *model.User) *User {
+	ret := &User{
+		Key: e.ID,
+	}
+	return ret
+}
+
+func (s *UserArango) toEntity(e *User) *model.User {
+	ret := &model.User{
+		ID: e.Key,
+	}
+	return ret
+}
+
 // Save is ...
-func (s *UserArango) Save(user *model.User) (*model.User, error) {
-	meta, err := s.collection.CreateDocument(nil, user)
+func (s *UserArango) Save(entity *model.User) (*model.User, error) {
+	c := s.fromEntity(entity)
+
+	meta, err := s.collection.CreateDocument(nil, c)
 	if err != nil {
 		return nil, err
 	}
-	user.ID = meta.Key
-	return user, nil
+	c.Key = meta.Key
+
+	entity = s.toEntity(c)
+	return entity, nil
 }
 
-// FetchByID is ...
-func (s *UserArango) FetchByID(userID string) (*model.User, error) {
-	var user model.User
-	s.collection.ReadDocument(nil, userID, &user)
-	user.ID = userID
-	return &user, nil
+// Fetch is ...
+func (s *UserArango) Fetch(entity *model.User) (*model.User, error) {
+	c := s.fromEntity(entity)
+
+	s.collection.ReadDocument(nil, c.Key, &c)
+
+	entity = s.toEntity(c)
+	return entity, nil
 }

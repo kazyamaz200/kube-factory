@@ -12,14 +12,14 @@ type Store struct {
 
 // UserStore is ...
 type UserStore interface {
-	Save(user *model.User) (*model.User, error)
-	FetchByID(userID string) (*model.User, error)
+	Save(entity *model.User) (*model.User, error)
+	Fetch(entity *model.User) (*model.User, error)
 }
 
 // ClusterStore is ...
 type ClusterStore interface {
-	Save(cluster *model.Cluster) (*model.Cluster, error)
-	FetchByID(clusterID string) (*model.Cluster, error)
+	Save(entity *model.Cluster) (*model.Cluster, error)
+	Fetch(entity *model.Cluster) (*model.Cluster, error)
 }
 
 // NewStore is ...
@@ -54,28 +54,28 @@ func WithClusterStore(i ClusterStore) StoreOption {
 
 // StoreProtocol is ...
 type StoreProtocol interface {
-	SaveUser(user *model.User) (*model.User, error)
-	FetchUserByID(userID string) (*model.User, error)
-	SaveCluster(cluster *model.Cluster) (*model.Cluster, error)
-	FetchClusterByID(clusterID string) (*model.Cluster, error)
+	SaveUser(entity *model.User) (*model.User, error)
+	FetchUser(entity *model.User) (*model.User, error)
+	SaveCluster(entity *model.Cluster) (*model.Cluster, error)
+	FetchCluster(entity *model.Cluster) (*model.Cluster, error)
 }
 
 // SaveUser is ...
-func (s *Store) SaveUser(user *model.User) (*model.User, error) {
-	return s.userStore.Save(user)
+func (s *Store) SaveUser(entity *model.User) (*model.User, error) {
+	return s.userStore.Save(entity)
 }
 
-// FetchUserByID is ...
-func (s *Store) FetchUserByID(userID string) (*model.User, error) {
-	return s.userStore.FetchByID(userID)
+// FetchUser is ...
+func (s *Store) FetchUser(entity *model.User) (*model.User, error) {
+	return s.userStore.Fetch(entity)
 }
 
 // SaveCluster is ...
-func (s *Store) SaveCluster(cluster *model.Cluster) (*model.Cluster, error) {
-	return s.clusterStore.Save(cluster)
+func (s *Store) SaveCluster(entity *model.Cluster) (*model.Cluster, error) {
+	return s.clusterStore.Save(entity)
 }
 
-// FetchClusterByID is ...
-func (s *Store) FetchClusterByID(clusterID string) (*model.Cluster, error) {
-	return s.clusterStore.FetchByID(clusterID)
+// FetchCluster is ...
+func (s *Store) FetchCluster(entity *model.Cluster) (*model.Cluster, error) {
+	return s.clusterStore.Fetch(entity)
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/kyamazawa/kube-factory/components/factory"
 	"github.com/kyamazawa/kube-factory/provider"
@@ -34,8 +35,8 @@ func setup() factory.SDK {
 	ua := ""
 	region := "par1"
 	// cloudflare
-	key := ""
-	email := ""
+	key := os.Getenv("KF_CF_KEY")
+	email := os.Getenv("KF_CF_EMAIL")
 
 	// services
 	users := store.NewUserArango(

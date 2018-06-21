@@ -1,6 +1,9 @@
 package factory
 
-import "github.com/kyamazawa/kube-factory/provider"
+import (
+	"github.com/kyamazawa/kube-factory/model"
+	"github.com/kyamazawa/kube-factory/provider"
+)
 
 // Interactor is ...
 type Interactor struct {
@@ -65,6 +68,11 @@ type Interaction interface {
 
 // DoCreateCluster is ...
 func (s *Interactor) DoCreateCluster(req *CreateClusterRequest, callback func(*CreateClusterViewModel, error)) {
-	res := &CreateClusterResponse{}
+	cluster := &model.Cluster{}
+	cluster, err := s.store.SaveCluster(cluster)
+	if err != nil {
+		callback(nil, err)
+	}
+	res := &CreateClusterResponse{ID: cluster.ID}
 	s.presenter.PresentCreateCluster(res, callback)
 }

@@ -89,26 +89,59 @@ func (s *FactoryHTTP) postAPIClusters(w http.ResponseWriter, r *http.Request) {
 
 // GET /api/clusters
 func (s *FactoryHTTP) getAPIClusters(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
+	result, err := s.sdk.ListCluster()
+	var body []byte
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		body, _ = json.Marshal(err)
+	} else {
+		w.WriteHeader(http.StatusAccepted)
+		body, _ = json.Marshal(result)
+	}
+	w.Write(body)
 }
 
 // GET /api/clusters/{id}
 func (s *FactoryHTTP) getAPIClustersID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "Cluster: %v\n", vars["id"])
+	result, err := s.sdk.DescribeCluster(vars["id"])
+	var body []byte
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		body, _ = json.Marshal(err)
+	} else {
+		w.WriteHeader(http.StatusAccepted)
+		body, _ = json.Marshal(result)
+	}
+	w.Write(body)
 }
 
 // PUT /api/clusters/{id}
 func (s *FactoryHTTP) putAPIClustersID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "Cluster: %v\n", vars["id"])
+	result, err := s.sdk.UpdateCluster(vars["id"])
+	var body []byte
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		body, _ = json.Marshal(err)
+	} else {
+		w.WriteHeader(http.StatusAccepted)
+		body, _ = json.Marshal(result)
+	}
+	w.Write(body)
 }
 
 // DELETE /api/clusters/{id}
 func (s *FactoryHTTP) deleteAPIClustersID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "Cluster: %v\n", vars["id"])
+	result, err := s.sdk.DeleteCluster(vars["id"])
+	var body []byte
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		body, _ = json.Marshal(err)
+	} else {
+		w.WriteHeader(http.StatusAccepted)
+		body, _ = json.Marshal(result)
+	}
+	w.Write(body)
 }

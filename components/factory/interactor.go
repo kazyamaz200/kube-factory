@@ -64,6 +64,10 @@ func WithDNS(p provider.DNSProtocol) InteractorOption {
 // Interaction is ...
 type Interaction interface {
 	DoCreateCluster(req *CreateClusterRequest, callback func(*CreateClusterViewModel, error))
+	DoListCluster(req *ListClusterRequest, callback func(*ListClusterViewModel, error))
+	DoDescribeCluster(req *DescribeClusterRequest, callback func(*DescribeClusterViewModel, error))
+	DoUpdateCluster(req *UpdateClusterRequest, callback func(*UpdateClusterViewModel, error))
+	DoDeleteCluster(req *DeleteClusterRequest, callback func(*DeleteClusterViewModel, error))
 }
 
 // DoCreateCluster is ...
@@ -75,4 +79,48 @@ func (s *Interactor) DoCreateCluster(req *CreateClusterRequest, callback func(*C
 	}
 	res := &CreateClusterResponse{ID: cluster.ID}
 	s.presenter.PresentCreateCluster(res, callback)
+}
+
+// DoListCluster is ...
+func (s *Interactor) DoListCluster(req *ListClusterRequest, callback func(*ListClusterViewModel, error)) {
+	cluster := &model.Cluster{}
+	cluster, err := s.store.SaveCluster(cluster)
+	if err != nil {
+		callback(nil, err)
+	}
+	res := &ListClusterResponse{ID: cluster.ID}
+	s.presenter.PresentListCluster(res, callback)
+}
+
+// DoDescribeCluster is ...
+func (s *Interactor) DoDescribeCluster(req *DescribeClusterRequest, callback func(*DescribeClusterViewModel, error)) {
+	cluster := &model.Cluster{}
+	cluster, err := s.store.SaveCluster(cluster)
+	if err != nil {
+		callback(nil, err)
+	}
+	res := &DescribeClusterResponse{ID: cluster.ID}
+	s.presenter.PresentDescribeCluster(res, callback)
+}
+
+// DoUpdateCluster is ...
+func (s *Interactor) DoUpdateCluster(req *UpdateClusterRequest, callback func(*UpdateClusterViewModel, error)) {
+	cluster := &model.Cluster{}
+	cluster, err := s.store.SaveCluster(cluster)
+	if err != nil {
+		callback(nil, err)
+	}
+	res := &UpdateClusterResponse{ID: cluster.ID}
+	s.presenter.PresentUpdateCluster(res, callback)
+}
+
+// DoDeleteCluster is ...
+func (s *Interactor) DoDeleteCluster(req *DeleteClusterRequest, callback func(*DeleteClusterViewModel, error)) {
+	cluster := &model.Cluster{}
+	cluster, err := s.store.SaveCluster(cluster)
+	if err != nil {
+		callback(nil, err)
+	}
+	res := &DeleteClusterResponse{ID: cluster.ID}
+	s.presenter.PresentDeleteCluster(res, callback)
 }

@@ -59,11 +59,11 @@ func (s *FactoryHTTP) Start() net.Listener {
 func (s *FactoryHTTP) config() {
 	api := s.router.PathPrefix("/api").Subrouter()
 	api.Use(jsonResponseMiddleware)
-	api.HandleFunc("/clusters", s.postClusters).Methods("POST")
-	api.HandleFunc("/clusters", s.getClusters).Methods("GET")
-	api.HandleFunc("/clusters/{id}", s.getClustersID).Methods("GET")
-	api.HandleFunc("/clusters/{id}", s.putClustersID).Methods("PUT")
-	api.HandleFunc("/clusters/{id}", s.deleteClustersID).Methods("DELETE")
+	api.HandleFunc("/clusters", s.postAPIClusters).Methods("POST")
+	api.HandleFunc("/clusters", s.getAPIClusters).Methods("GET")
+	api.HandleFunc("/clusters/{id}", s.getAPIClustersID).Methods("GET")
+	api.HandleFunc("/clusters/{id}", s.putAPIClustersID).Methods("PUT")
+	api.HandleFunc("/clusters/{id}", s.deleteAPIClustersID).Methods("DELETE")
 }
 
 func jsonResponseMiddleware(next http.Handler) http.Handler {
@@ -74,7 +74,7 @@ func jsonResponseMiddleware(next http.Handler) http.Handler {
 }
 
 // POST /api/clusters
-func (s *FactoryHTTP) postClusters(w http.ResponseWriter, r *http.Request) {
+func (s *FactoryHTTP) postAPIClusters(w http.ResponseWriter, r *http.Request) {
 	result, err := s.sdk.CreateCluster()
 	var body []byte
 	if err != nil {
@@ -88,26 +88,26 @@ func (s *FactoryHTTP) postClusters(w http.ResponseWriter, r *http.Request) {
 }
 
 // GET /api/clusters
-func (s *FactoryHTTP) getClusters(w http.ResponseWriter, r *http.Request) {
+func (s *FactoryHTTP) getAPIClusters(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
 // GET /api/clusters/{id}
-func (s *FactoryHTTP) getClustersID(w http.ResponseWriter, r *http.Request) {
+func (s *FactoryHTTP) getAPIClustersID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "Cluster: %v\n", vars["id"])
 }
 
 // PUT /api/clusters/{id}
-func (s *FactoryHTTP) putClustersID(w http.ResponseWriter, r *http.Request) {
+func (s *FactoryHTTP) putAPIClustersID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "Cluster: %v\n", vars["id"])
 }
 
 // DELETE /api/clusters/{id}
-func (s *FactoryHTTP) deleteClustersID(w http.ResponseWriter, r *http.Request) {
+func (s *FactoryHTTP) deleteAPIClustersID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "Cluster: %v\n", vars["id"])
